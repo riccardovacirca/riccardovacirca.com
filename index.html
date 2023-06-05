@@ -63,7 +63,7 @@ axios({
         '<h3><strong>'+name+'</strong> <span id="'+name+'-rel"></span></h3>'+
         '<div>'+repos.data[i].description+'</div>'+
         '<div>Language: <b>'+repos.data[i].language+'</b>'+(repos.data[i].license != null ? ', License: <b>' + repos.data[i].license.name +'</b>' : '') + '</div>'+
-        (repos.data[i].homepage.length > 0 ? '<a class="text-info" href="'+repos.data[i].homepage+'">'+repos.data[i].homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,':'')+
+        (repos.data[i].homepage!=null && repos.data[i].homepage.length > 0 ? '<a class="text-info" href="'+repos.data[i].homepage+'">'+repos.data[i].homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,':'')+
         '<a class="text-info" href="'+repos.data[i].html_url+'">'+repos.data[i].name+' on Github <i class="fa fa-github"></i></a>';
       axios({
         method:"get",
