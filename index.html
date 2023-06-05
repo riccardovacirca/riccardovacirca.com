@@ -57,24 +57,26 @@ axios({
     url:"https://api.github.com/users/riccardovacirca/repos",
     headers:{"Accept": "application/vnd.github.v3+json"}
 }).then((repos) => {
-    for (let i = repos.data.length-1; i >= 0; i--) {
-        let name = repos.data[i].name;
-        document.getElementById('repos').innerHTML +=
-            '<h3><strong>'+name+'</strong> <span id="'+name+'-rel"></span></h3>'+
-            '<div>'+repos.data[i].description+'</div>'+
-            '<div>Language: <b>'+repos.data[i].language+'</b>, License: <b>'+repos.data[i].license.name+'</b></div>'+
-            (repos.data[i].homepage.length > 0 ? '<a class="text-info" href="'+repos.data[i].homepage+'">'+repos.data[i].homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,':'')+
-            '<a class="text-info" href="'+repos.data[i].html_url+'">'+repos.data[i].name+' on Github <i class="fa fa-github"></i></a>';
-        axios({
-            method:"get",
-            url:"https://api.github.com/repos/riccardovacirca/"+name+"/releases",
-            headers:{"Accept": "application/vnd.github.v3+json"}
-        }).then((rel) => {
-            document.getElementById(name+'-rel').innerHTML = rel.data[0].tag_name;
-        }).catch((err) => {console.log(err);});
+  for (let i = repos.data.length-1; i >= 0; i--) {
+    if (repos.data[i] != null) {
+      let name = repos.data[i].name;
+      document.getElementById('repos').innerHTML +=
+          '<h3><strong>'+name+'</strong> <span id="'+name+'-rel"></span></h3>'+
+          '<div>'+repos.data[i].description+'</div>'+
+          '<div>Language: <b>'+repos.data[i].language+'</b>'+(repos.data[i].license != null ? ', License: <b>' + repos.data[i].license.name +'</b>' : '') + '</div>'+
+          (repos.data[i].homepage.length > 0 ? '<a class="text-info" href="'+repos.data[i].homepage+'">'+repos.data[i].homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,':'')+
+          '<a class="text-info" href="'+repos.data[i].html_url+'">'+repos.data[i].name+' on Github <i class="fa fa-github"></i></a>';
+      axios({
+          method:"get",
+          url:"https://api.github.com/repos/riccardovacirca/"+name+"/releases",
+          headers:{"Accept": "application/vnd.github.v3+json"}
+      }).then((rel) => {
+          document.getElementById(name+'-rel').innerHTML = rel.data[0].tag_name;
+      }).catch((err) => {console.log(err);});
     }
+  }
 }).catch((err) => {
-    console.log(err);
+  console.log(err);
 });
 
 </script>
