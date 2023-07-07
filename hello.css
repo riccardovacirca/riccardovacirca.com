@@ -1,1 +1,6 @@
-body, p {  color:#ff0000;}
+@media screen{
+  body, p {
+    font-weight: bold;
+    color:#004400;
+  }
+}
