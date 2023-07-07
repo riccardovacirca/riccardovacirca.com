@@ -1,7 +1,1 @@
 body, p {  color:#ff0000;}
-@media print {
-  body, p {
-    font-weight: bold;
-    color:#000000;
-  }
-}
