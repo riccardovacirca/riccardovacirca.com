@@ -1,295 +1,288 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<!-- The GNU coding standards, last updated July 1, 2021.
-
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Free
-Software Foundation, Inc.
-
-Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.3 or
-any later version published by the Free Software Foundation; with no
-Invariant Sections, no Front-Cover Texts, and no Back-Cover
-Texts.  A copy of the license is included in the section entitled
-"GNU Free Documentation License". -->
-<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>GNU Coding Standards</title>
-
-<meta name="description" content="GNU Coding Standards">
-<meta name="keywords" content="GNU Coding Standards">
-<meta name="resource-type" content="document">
-<meta name="distribution" content="global">
-<meta name="Generator" content="makeinfo">
-<link href="#Top" rel="start" title="Top">
-<link href="#Index" rel="index" title="Index">
-<link href="#SEC_Contents" rel="contents" title="Table of Contents">
-<link href="/manual" rel="up" title="(dir)">
-<style type="text/css">
-<!--
-a.summary-letter {text-decoration: none}
-blockquote.indentedblock {margin-right: 0em}
-blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
-blockquote.smallquotation {font-size: smaller}
-div.display {margin-left: 3.2em}
-div.example {margin-left: 3.2em}
-div.lisp {margin-left: 3.2em}
-div.smalldisplay {margin-left: 3.2em}
-div.smallexample {margin-left: 3.2em}
-div.smalllisp {margin-left: 3.2em}
-kbd {font-style: oblique}
-pre.display {font-family: inherit}
-pre.format {font-family: inherit}
-pre.menu-comment {font-family: serif}
-pre.menu-preformatted {font-family: serif}
-pre.smalldisplay {font-family: inherit; font-size: smaller}
-pre.smallexample {font-size: smaller}
-pre.smallformat {font-family: inherit; font-size: smaller}
-pre.smalllisp {font-size: smaller}
-span.nolinebreak {white-space: nowrap}
-span.roman {font-family: initial; font-weight: normal}
-span.sansserif {font-family: sans-serif; font-weight: normal}
-ul.no-bullet {list-style: none}
--->
-</style>
-<link rel="stylesheet" type="text/css" href="/software/gnulib/manual.css">
-
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Riccardo Vacirca">
+  <title>riccardo vacirca - aprx coding style</title>
+  <!-- -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet">
+  <!-- -->
+  <style>
+  body {
+    margin: 0;
+    border-top: 4px solid #17a2b8;
+    position: relative;
+    font-size:14px;
+  }
+  .logo {
+    color: #777
+  }
+  .title {
+    color: #444;
+  }
+  .sub-title{
+    color: #17a2b8;
+  }
+  main, footer {
+    margin: 0 auto;
+    max-width: 770px;
+  }
+  #main {
+    padding-top: 30px;
+  }
+  .font-anton {
+    font-family:'Anton', sans-serif;
+  }
+  #db-diagram {
+    max-width: 678px;
+    max-height: 391px;
+    width: 100%;
+  }
+  .card-body {
+    padding: 5px;
+  }
+  td {
+    vertical-align: top;
+  }
+  .no-bullet {
+    list-style: none;
+  }
+  p {font-size: 16px;}
+  </style>
 </head>
-
-<body lang="en">
-<h1 class="settitle" align="center">GNU Coding Standards</h1>
-
-
-
-
-
-
-
-<a name="SEC_Contents"></a>
-<h2 class="contents-heading">Table of Contents</h2>
-
+<body><main><div id="main" class="container">
+<!-- ----------------------------------------------------------------------- -->
+<h1 class="display-5 font-anton logo">APRx coding style<div style="font-size:16px;font-family:Arial, Helvetica, sans-serif;color:darkorange;"><b>italiano</b></div></h1><br>
+<!-- ----------------------------------------------------------------------- -->
+<a name="APRX_Contents"></a>
+<h4 class="display-5 logo">Indice dei contenuti</h4>
 <div class="contents">
-
-<ul class="no-bullet">
-  <li><a name="toc-About-the-GNU-Coding-Standards" href="#Preface">1 About the GNU Coding Standards</a></li>
-  <li><a name="toc-Keeping-Free-Software-Free" href="#Legal-Issues">2 Keeping Free Software Free</a>
   <ul class="no-bullet">
-    <li><a name="toc-Referring-to-Proprietary-Programs" href="#Reading-Non_002dFree-Code">2.1 Referring to Proprietary Programs</a></li>
-    <li><a name="toc-Accepting-Contributions" href="#Contributions">2.2 Accepting Contributions</a></li>
-    <li><a name="toc-Trademarks-1" href="#Trademarks">2.3 Trademarks</a></li>
-  </ul></li>
-  <li><a name="toc-General-Program-Design" href="#Design-Advice">3 General Program Design</a>
-  <ul class="no-bullet">
-    <li><a name="toc-Which-Languages-to-Use" href="#Source-Language">3.1 Which Languages to Use</a></li>
-    <li><a name="toc-Compatibility-with-Other-Implementations" href="#Compatibility">3.2 Compatibility with Other Implementations</a></li>
-    <li><a name="toc-Using-Non_002dstandard-Features" href="#Using-Extensions">3.3 Using Non-standard Features</a></li>
-    <li><a name="toc-Standard-C-and-Pre_002dStandard-C" href="#Standard-C">3.4 Standard C and Pre-Standard C</a></li>
-    <li><a name="toc-Conditional-Compilation-1" href="#Conditional-Compilation">3.5 Conditional Compilation</a></li>
-  </ul></li>
-  <li><a name="toc-Program-Behavior-for-All-Programs" href="#Program-Behavior">4 Program Behavior for All Programs</a>
-  <ul class="no-bullet">
-    <li><a name="toc-Non_002dGNU-Standards-1" href="#Non_002dGNU-Standards">4.1 Non-GNU Standards</a></li>
-    <li><a name="toc-Writing-Robust-Programs" href="#Semantics">4.2 Writing Robust Programs</a></li>
-    <li><a name="toc-Library-Behavior" href="#Libraries">4.3 Library Behavior</a></li>
-    <li><a name="toc-Formatting-Error-Messages" href="#Errors">4.4 Formatting Error Messages</a></li>
-    <li><a name="toc-Standards-for-Interfaces-Generally" href="#User-Interfaces">4.5 Standards for Interfaces Generally</a></li>
-    <li><a name="toc-Finding-the-Program_0027s-Executable-and-Associated-Files" href="#Finding-Program-Files">4.6 Finding the Program&rsquo;s Executable and Associated Files</a></li>
-    <li><a name="toc-Standards-for-Graphical-Interfaces" href="#Graphical-Interfaces">4.7 Standards for Graphical Interfaces</a></li>
-    <li><a name="toc-Standards-for-Command-Line-Interfaces" href="#Command_002dLine-Interfaces">4.8 Standards for Command Line Interfaces</a>
-    <ul class="no-bullet">
-      <li><a name="toc-_002d_002dversion-1" href="#g_t_002d_002dversion">4.8.1 <samp>--version</samp></a></li>
-      <li><a name="toc-_002d_002dhelp-1" href="#g_t_002d_002dhelp">4.8.2 <samp>--help</samp></a></li>
+    <li><a name="aprx-Introduzione" href="#Preface">Introduzione</a></li>
+    <li><a name="aprx-Skeleton-di-un-Programma" href="#Skeleton">Skeleton di un programma</a>
+    <!-- ul class="no-bullet">
+      <li><a name="aprx-Referring-to-Proprietary-Programs" href="#Reading-Non_002dFree-Code">2.1 Referring to Proprietary Programs</a></li>
+      <li><a name="aprx-Accepting-Contributions" href="#Contributions">2.2 Accepting Contributions</a></li>
+      <li><a name="aprx-Trademarks-1" href="#Trademarks">2.3 Trademarks</a></li>
     </ul></li>
-    <li><a name="toc-Standards-for-Dynamic-Plug_002din-Interfaces" href="#Dynamic-Plug_002dIn-Interfaces">4.9 Standards for Dynamic Plug-in Interfaces</a></li>
-    <li><a name="toc-Table-of-Long-Options" href="#Option-Table">4.10 Table of Long Options</a></li>
-    <li><a name="toc-OID-Allocations-1" href="#OID-Allocations">4.11 OID Allocations</a></li>
-    <li><a name="toc-Memory-Usage-1" href="#Memory-Usage">4.12 Memory Usage</a></li>
-    <li><a name="toc-File-Usage-1" href="#File-Usage">4.13 File Usage</a></li>
-  </ul></li>
-  <li><a name="toc-Making-The-Best-Use-of-C" href="#Writing-C">5 Making The Best Use of C</a>
-  <ul class="no-bullet">
-    <li><a name="toc-Formatting-Your-Source-Code" href="#Formatting">5.1 Formatting Your Source Code</a></li>
-    <li><a name="toc-Commenting-Your-Work" href="#Comments">5.2 Commenting Your Work</a></li>
-    <li><a name="toc-Clean-Use-of-C-Constructs" href="#Syntactic-Conventions">5.3 Clean Use of C Constructs</a></li>
-    <li><a name="toc-Naming-Variables_002c-Functions_002c-and-Files" href="#Names">5.4 Naming Variables, Functions, and Files</a></li>
-    <li><a name="toc-Portability-between-System-Types" href="#System-Portability">5.5 Portability between System Types</a></li>
-    <li><a name="toc-Portability-between-CPUs" href="#CPU-Portability">5.6 Portability between CPUs</a></li>
-    <li><a name="toc-Calling-System-Functions" href="#System-Functions">5.7 Calling System Functions</a></li>
-    <li><a name="toc-Internationalization-1" href="#Internationalization">5.8 Internationalization</a></li>
-    <li><a name="toc-Character-Set-1" href="#Character-Set">5.9 Character Set</a></li>
-    <li><a name="toc-Quote-Characters-1" href="#Quote-Characters">5.10 Quote Characters</a></li>
-    <li><a name="toc-Mmap-1" href="#Mmap">5.11 Mmap</a></li>
-  </ul></li>
-  <li><a name="toc-Documenting-Programs" href="#Documentation">6 Documenting Programs</a>
-  <ul class="no-bullet">
-    <li><a name="toc-GNU-Manuals-1" href="#GNU-Manuals">6.1 GNU Manuals</a></li>
-    <li><a name="toc-Doc-Strings-and-Manuals-1" href="#Doc-Strings-and-Manuals">6.2 Doc Strings and Manuals</a></li>
-    <li><a name="toc-Manual-Structure-Details-1" href="#Manual-Structure-Details">6.3 Manual Structure Details</a></li>
-    <li><a name="toc-License-for-Manuals-1" href="#License-for-Manuals">6.4 License for Manuals</a></li>
-    <li><a name="toc-Manual-Credits-1" href="#Manual-Credits">6.5 Manual Credits</a></li>
-    <li><a name="toc-Printed-Manuals-1" href="#Printed-Manuals">6.6 Printed Manuals</a></li>
-    <li><a name="toc-The-NEWS-File" href="#NEWS-File">6.7 The NEWS File</a></li>
-    <li><a name="toc-Change-Logs-1" href="#Change-Logs">6.8 Change Logs</a>
+    <li><a name="aprx-General-Program-Design" href="#Design-Advice">3 General Program Design</a>
     <ul class="no-bullet">
-      <li><a name="toc-Change-Log-Concepts-and-Conventions" href="#Change-Log-Concepts">6.8.1 Change Log Concepts and Conventions</a></li>
-      <li><a name="toc-Style-of-Change-Logs-1" href="#Style-of-Change-Logs">6.8.2 Style of Change Logs</a></li>
-      <li><a name="toc-Simple-Changes-1" href="#Simple-Changes">6.8.3 Simple Changes</a></li>
-      <li><a name="toc-Conditional-Changes-1" href="#Conditional-Changes">6.8.4 Conditional Changes</a></li>
-      <li><a name="toc-Indicating-the-Part-Changed-1" href="#Indicating-the-Part-Changed">6.8.5 Indicating the Part Changed</a></li>
+      <li><a name="aprx-Which-Languages-to-Use" href="#Source-Language">3.1 Which Languages to Use</a></li>
+      <li><a name="aprx-Compatibility-with-Other-Implementations" href="#Compatibility">3.2 Compatibility with Other Implementations</a></li>
+      <li><a name="aprx-Using-Non_002dstandard-Features" href="#Using-Extensions">3.3 Using Non-standard Features</a></li>
+      <li><a name="aprx-Standard-C-and-Pre_002dStandard-C" href="#Standard-C">3.4 Standard C and Pre-Standard C</a></li>
+      <li><a name="aprx-Conditional-Compilation-1" href="#Conditional-Compilation">3.5 Conditional Compilation</a></li>
     </ul></li>
-    <li><a name="toc-Man-Pages-1" href="#Man-Pages">6.9 Man Pages</a></li>
-    <li><a name="toc-Reading-other-Manuals-1" href="#Reading-other-Manuals">6.10 Reading other Manuals</a></li>
-  </ul></li>
-  <li><a name="toc-The-Release-Process" href="#Managing-Releases">7 The Release Process</a>
-  <ul class="no-bullet">
-    <li><a name="toc-How-Configuration-Should-Work" href="#Configuration">7.1 How Configuration Should Work</a></li>
-    <li><a name="toc-Makefile-Conventions-1" href="#Makefile-Conventions">7.2 Makefile Conventions</a>
+    <li><a name="aprx-Program-Behavior-for-All-Programs" href="#Program-Behavior">4 Program Behavior for All Programs</a>
     <ul class="no-bullet">
-      <li><a name="toc-General-Conventions-for-Makefiles" href="#Makefile-Basics">7.2.1 General Conventions for Makefiles</a></li>
-      <li><a name="toc-Utilities-in-Makefiles-1" href="#Utilities-in-Makefiles">7.2.2 Utilities in Makefiles</a></li>
-      <li><a name="toc-Variables-for-Specifying-Commands" href="#Command-Variables">7.2.3 Variables for Specifying Commands</a></li>
-      <li><a name="toc-DESTDIR_003a-Support-for-Staged-Installs" href="#DESTDIR">7.2.4 <code>DESTDIR</code>: Support for Staged Installs</a></li>
-      <li><a name="toc-Variables-for-Installation-Directories" href="#Directory-Variables">7.2.5 Variables for Installation Directories</a></li>
-      <li><a name="toc-Standard-Targets-for-Users" href="#Standard-Targets">7.2.6 Standard Targets for Users</a></li>
-      <li><a name="toc-Install-Command-Categories-1" href="#Install-Command-Categories">7.2.7 Install Command Categories</a></li>
+      <li><a name="aprx-Non_002dGNU-Standards-1" href="#Non_002dGNU-Standards">4.1 Non-GNU Standards</a></li>
+      <li><a name="aprx-Writing-Robust-Programs" href="#Semantics">4.2 Writing Robust Programs</a></li>
+      <li><a name="aprx-Library-Behavior" href="#Libraries">4.3 Library Behavior</a></li>
+      <li><a name="aprx-Formatting-Error-Messages" href="#Errors">4.4 Formatting Error Messages</a></li>
+      <li><a name="aprx-Standards-for-Interfaces-Generally" href="#User-Interfaces">4.5 Standards for Interfaces Generally</a></li>
+      <li><a name="aprx-Finding-the-Program_0027s-Executable-and-Associated-Files" href="#Finding-Program-Files">4.6 Finding the Program&rsquo;s Executable and Associated Files</a></li>
+      <li><a name="aprx-Standards-for-Graphical-Interfaces" href="#Graphical-Interfaces">4.7 Standards for Graphical Interfaces</a></li>
+      <li><a name="aprx-Standards-for-Command-Line-Interfaces" href="#Command_002dLine-Interfaces">4.8 Standards for Command Line Interfaces</a>
+      <ul class="no-bullet">
+        <li><a name="aprx-_002d_002dversion-1" href="#g_t_002d_002dversion">4.8.1 <samp>--version</samp></a></li>
+        <li><a name="aprx-_002d_002dhelp-1" href="#g_t_002d_002dhelp">4.8.2 <samp>--help</samp></a></li>
+      </ul></li>
+      <li><a name="aprx-Standards-for-Dynamic-Plug_002din-Interfaces" href="#Dynamic-Plug_002dIn-Interfaces">4.9 Standards for Dynamic Plug-in Interfaces</a></li>
+      <li><a name="aprx-Table-of-Long-Options" href="#Option-Table">4.10 Table of Long Options</a></li>
+      <li><a name="aprx-OID-Allocations-1" href="#OID-Allocations">4.11 OID Allocations</a></li>
+      <li><a name="aprx-Memory-Usage-1" href="#Memory-Usage">4.12 Memory Usage</a></li>
+      <li><a name="aprx-File-Usage-1" href="#File-Usage">4.13 File Usage</a></li>
     </ul></li>
-    <li><a name="toc-Making-Releases" href="#Releases">7.3 Making Releases</a></li>
-  </ul></li>
-  <li><a name="toc-References-to-Non_002dFree-Software-and-Documentation" href="#References">8 References to Non-Free Software and Documentation</a></li>
-  <li><a name="toc-GNU-Free-Documentation-License-1" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a></li>
-  <li><a name="toc-Index-1" href="#Index">Index</a></li>
-</ul>
+    <li><a name="aprx-Making-The-Best-Use-of-C" href="#Writing-C">5 Making The Best Use of C</a>
+    <ul class="no-bullet">
+      <li><a name="aprx-Formatting-Your-Source-Code" href="#Formatting">5.1 Formatting Your Source Code</a></li>
+      <li><a name="aprx-Commenting-Your-Work" href="#Comments">5.2 Commenting Your Work</a></li>
+      <li><a name="aprx-Clean-Use-of-C-Constructs" href="#Syntactic-Conventions">5.3 Clean Use of C Constructs</a></li>
+      <li><a name="aprx-Naming-Variables_002c-Functions_002c-and-Files" href="#Names">5.4 Naming Variables, Functions, and Files</a></li>
+      <li><a name="aprx-Portability-between-System-Types" href="#System-Portability">5.5 Portability between System Types</a></li>
+      <li><a name="aprx-Portability-between-CPUs" href="#CPU-Portability">5.6 Portability between CPUs</a></li>
+      <li><a name="aprx-Calling-System-Functions" href="#System-Functions">5.7 Calling System Functions</a></li>
+      <li><a name="aprx-Internationalization-1" href="#Internationalization">5.8 Internationalization</a></li>
+      <li><a name="aprx-Character-Set-1" href="#Character-Set">5.9 Character Set</a></li>
+      <li><a name="aprx-Quote-Characters-1" href="#Quote-Characters">5.10 Quote Characters</a></li>
+      <li><a name="aprx-Mmap-1" href="#Mmap">5.11 Mmap</a></li>
+    </ul></li>
+    <li><a name="aprx-Documenting-Programs" href="#Documentation">6 Documenting Programs</a>
+    <ul class="no-bullet">
+      <li><a name="aprx-GNU-Manuals-1" href="#GNU-Manuals">6.1 GNU Manuals</a></li>
+      <li><a name="aprx-Doc-Strings-and-Manuals-1" href="#Doc-Strings-and-Manuals">6.2 Doc Strings and Manuals</a></li>
+      <li><a name="aprx-Manual-Structure-Details-1" href="#Manual-Structure-Details">6.3 Manual Structure Details</a></li>
+      <li><a name="aprx-License-for-Manuals-1" href="#License-for-Manuals">6.4 License for Manuals</a></li>
+      <li><a name="aprx-Manual-Credits-1" href="#Manual-Credits">6.5 Manual Credits</a></li>
+      <li><a name="aprx-Printed-Manuals-1" href="#Printed-Manuals">6.6 Printed Manuals</a></li>
+      <li><a name="aprx-The-NEWS-File" href="#NEWS-File">6.7 The NEWS File</a></li>
+      <li><a name="aprx-Change-Logs-1" href="#Change-Logs">6.8 Change Logs</a>
+      <ul class="no-bullet">
+        <li><a name="aprx-Change-Log-Concepts-and-Conventions" href="#Change-Log-Concepts">6.8.1 Change Log Concepts and Conventions</a></li>
+        <li><a name="aprx-Style-of-Change-Logs-1" href="#Style-of-Change-Logs">6.8.2 Style of Change Logs</a></li>
+        <li><a name="aprx-Simple-Changes-1" href="#Simple-Changes">6.8.3 Simple Changes</a></li>
+        <li><a name="aprx-Conditional-Changes-1" href="#Conditional-Changes">6.8.4 Conditional Changes</a></li>
+        <li><a name="aprx-Indicating-the-Part-Changed-1" href="#Indicating-the-Part-Changed">6.8.5 Indicating the Part Changed</a></li>
+      </ul></li>
+      <li><a name="aprx-Man-Pages-1" href="#Man-Pages">6.9 Man Pages</a></li>
+      <li><a name="aprx-Reading-other-Manuals-1" href="#Reading-other-Manuals">6.10 Reading other Manuals</a></li>
+    </ul></li>
+    <li><a name="aprx-The-Release-Process" href="#Managing-Releases">7 The Release Process</a>
+    <ul class="no-bullet">
+      <li><a name="aprx-How-Configuration-Should-Work" href="#Configuration">7.1 How Configuration Should Work</a></li>
+      <li><a name="aprx-Makefile-Conventions-1" href="#Makefile-Conventions">7.2 Makefile Conventions</a>
+      <ul class="no-bullet">
+        <li><a name="aprx-General-Conventions-for-Makefiles" href="#Makefile-Basics">7.2.1 General Conventions for Makefiles</a></li>
+        <li><a name="aprx-Utilities-in-Makefiles-1" href="#Utilities-in-Makefiles">7.2.2 Utilities in Makefiles</a></li>
+        <li><a name="aprx-Variables-for-Specifying-Commands" href="#Command-Variables">7.2.3 Variables for Specifying Commands</a></li>
+        <li><a name="aprx-DESTDIR_003a-Support-for-Staged-Installs" href="#DESTDIR">7.2.4 <code>DESTDIR</code>: Support for Staged Installs</a></li>
+        <li><a name="aprx-Variables-for-Installation-Directories" href="#Directory-Variables">7.2.5 Variables for Installation Directories</a></li>
+        <li><a name="aprx-Standard-Targets-for-Users" href="#Standard-Targets">7.2.6 Standard Targets for Users</a></li>
+        <li><a name="aprx-Install-Command-Categories-1" href="#Install-Command-Categories">7.2.7 Install Command Categories</a></li>
+      </ul></li>
+      <li><a name="aprx-Making-Releases" href="#Releases">7.3 Making Releases</a></li>
+    </ul></li>
+    <li><a name="aprx-References-to-Non_002dFree-Software-and-Documentation" href="#References">8 References to Non-Free Software and Documentation</a></li>
+    <li><a name="aprx-GNU-Free-Documentation-License-1" href="#GNU-Free-Documentation-License">Appendix A GNU Free Documentation License</a></li>
+    <li><a name="aprx-Index-1" href="#Index">Index</a></li -->
+  </ul>
 </div>
-
-
+<!-- ----------------------------------------------------------------------- -->
 <a name="Top"></a>
-<div class="header">
-<p>
-Next: <a href="#Preface" accesskey="n" rel="next">Preface</a>, Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
-</div>
-<a name="GNU-Coding-Standards"></a>
-<h1 class="top">GNU Coding Standards</h1>
-
-<p>The GNU coding standards, last updated July 1, 2021.
-</p>
-<p>Copyright &copy; 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Free
-Software Foundation, Inc.
-</p>
-<p>Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.3 or
-any later version published by the Free Software Foundation; with no
-Invariant Sections, no Front-Cover Texts, and no Back-Cover
-Texts.  A copy of the license is included in the section entitled
-&ldquo;GNU Free Documentation License&rdquo;.
-</p>
-
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="#Preface" accesskey="1">Preface</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">About the GNU Coding Standards.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Legal-Issues" accesskey="2">Legal Issues</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Keeping free software free.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Design-Advice" accesskey="3">Design Advice</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">General program design.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Program-Behavior" accesskey="4">Program Behavior</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Program behavior for all programs
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Writing-C" accesskey="5">Writing C</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making the best use of C.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Documentation" accesskey="6">Documentation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Documenting programs.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Managing-Releases" accesskey="7">Managing Releases</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The release process.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#References" accesskey="8">References</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Mentioning non-free software or documentation.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#GNU-Free-Documentation-License" accesskey="9">GNU Free Documentation License</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Copying and sharing this manual.
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Index">Index</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
-
-</pre></th></tr></table>
-
+<!-- ----------------------------------------------------------------------- -->
 <hr>
 <a name="Preface"></a>
 <div class="header">
-<p>
-Next: <a href="#Legal-Issues" accesskey="n" rel="next">Legal Issues</a>, Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+  <p>
+    Next: <a href="#Skeleton" accesskey="n" rel="next">Skeleton di un programma</a>,
+    Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#APRX_Contents" title="Indice dei contenuti" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
 </div>
-<a name="About-the-GNU-Coding-Standards"></a>
-<h2 class="chapter">1 About the GNU Coding Standards</h2>
-
-<p>The GNU Coding Standards were written by Richard Stallman and other GNU
-Project volunteers.  Their purpose is to make the GNU system clean,
-consistent, and easy to install.  This document can also be read as a
-guide to writing portable, robust and reliable programs.  It focuses on
-programs written in C, but many of the rules and principles are useful
-even if you write in another programming language.  The rules often
-state reasons for writing in a certain way.
-</p>
-<a name="index-where-to-obtain-standards_002etexi"></a>
-<a name="index-downloading-this-manual"></a>
-<p>If you did not obtain this file directly from the GNU project and
-recently, please check for a newer version.  You can get the GNU
-Coding Standards from the GNU web server in many
-different formats, including the Texinfo source, PDF, HTML, DVI, plain
-text, and more, at: <a href="https://www.gnu.org/prep/standards/">https://www.gnu.org/prep/standards/</a>.
-</p>
-<p>If you are maintaining an official GNU package, in addition to this
-document, please read and follow the GNU maintainer information
-(see <a href="http://www.gnu.org/prep/maintain/maintain.html#Top">Contents</a> in <cite>Information for Maintainers of GNU
-Software</cite>).
-</p>
-<a name="index-gnustandards_002dcommit_0040gnu_002eorg-mailing-list"></a>
-<p>If you want to receive diffs for every change to these GNU documents,
-join the mailing list <code>gnustandards-commit@gnu.org</code>, via the web
-interface at
-<a href="https://lists.gnu.org/mailman/listinfo/gnustandards-commit">https://lists.gnu.org/mailman/listinfo/gnustandards-commit</a>.
-Archives are also available there.
-</p>
-<a name="index-bug_002dstandards_0040gnu_002eorg-email-address"></a>
-<a name="index-Savannah-repository-for-gnustandards"></a>
-<a name="index-gnustandards-project-repository"></a>
-<p>Please send corrections or suggestions for this document to
-<a href="mailto:bug-standards@gnu.org">bug-standards@gnu.org</a>.  If you make a suggestion, please
-include a suggested new wording for it, to help us consider the
-suggestion efficiently.  We prefer a context diff to the Texinfo
-source, but if that&rsquo;s difficult for you, you can make a context diff
-for some other version of this document, or propose it in any way that
-makes it clear.  The source repository for this document can be found
-at <a href="https://savannah.gnu.org/projects/gnustandards">https://savannah.gnu.org/projects/gnustandards</a>.
-</p>
-<p>These standards cover the minimum of what is important when writing a
-GNU package.  Likely, the need for additional standards will come up.
-Sometimes, you might suggest that such standards be added to this
-document.  If you think your standards would be generally useful, please
-do suggest them.
-</p>
-<p>You should also set standards for your package on many questions not
-addressed or not firmly specified here.  The most important point is to
-be self-consistent&mdash;try to stick to the conventions you pick, and try
-to document them as much as possible.  That way, your program will be
-more maintainable by others.
-</p>
-<p>The GNU Hello program serves as an example of how to follow the GNU
-coding standards for a trivial program.
-<a href="https://www.gnu.org/software/hello/hello.html">https://www.gnu.org/software/hello/hello.html</a>.
-</p>
-<p>This release of the GNU Coding Standards was last updated
-July 1, 2021.
-</p>
-
+<a name="Introduzione"></a>
+<h4 class="chapter">Introduzione</h4>
+<p>La libreria APRx (Apache Portable Runtime eXtension) è una raccolta di
+  funzioni che hanno lo scopo di facilitare lo sviluppo di applicazioni basate
+  su APR, il runtime di Apache HTTP server.
+<p>Questo documento affronta gli aspetti relativi alla strutturazione
+  dei sorgenti che possono migliorare la qualità generale del codice prodotto.
+  Non si tratta qui, di aspetti legati semplicemente allo stile di scrittura
+  del codice, ma del ricorso a un insieme di tecniche di programmazione il cui
+  fine è quello di realizzare un codice pulito e ben strutturato, facile da
+  comprendere e intrinsecamente disaccoppiato.</p>
+<p>Queste tecniche sebbene di validità generale, diventano essenziali quando
+  ci si accosta alla programmazione in linguaggio C, spesso poco intuitiva e
+  la cui qualità complessiva dipende più che in altri linguaggi da
+  un'abitudine a una scrittura ordinata e ben strutturata.</p>
+<!-- ----------------------------------------------------------------------- -->
 <hr>
+<a name="Skeleton"></a>
+<div class="header">
+  <p>
+    Next: <a href="#ProssimoArgomento" accesskey="n" rel="next">Prossimo argomento</a>,
+    Previous: <a href="#Preface" accesskey="p" rel="prev">Introduzione</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#APRX_Contents" title="Indice dei contenuti" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
+</div>
+<a name="Skeleton"></a>
+<h4 class="chapter">Skeleton di un programma</h4>
+<p>Un programma basato su APR ha la seguente struttura di base:</p>
+<pre><code class="language-c">int main() {
+  
+  apr_status_t st;
+  st = apr_initialize();
+  
+  if (st != APR_SUCCESS) {
+    exit(EXIT_FAILURE);
+  }
+
+  apr_pool_t *mp;
+  st = apr_pool_create(&mp, NULL);
+  
+  if (st != APR_SUCCESS) {
+    exit(EXIT_FAILURE);
+  }
+
+  // Qui la logica applicativa
+
+  apr_pool_destroy(mp);
+  apr_terminate();
+  
+  exit(EXIT_SUCCESS);
+}
+</code></pre>
+<p>La spiegazione dettagliata delle istruzioni precedenti
+  è parte del tutorial sulla programmazione con APR. Quello che qui
+  interessa è la struttura del codice proposto.</p>
+<p>Nell'esempio mostrato, si ha una parte destinata all'inizializzazione
+  delle strutture dati e della memoria cui segue la logica applicativa della
+  funzione, quindi il rilascio delle risorse allocate. La dichiarazione
+  delle variabili, la loro inizializzazione e il controllo degli
+  errori è distribuito lungo tutto il corpo della funzione e quest'ultima,
+  sebbene formalmente corretta non suggerisce alcun tipo di organizzazione
+  strutturata del codice.</p>
+<p>Proponiamo adesso una seconda versione della funzione main con l'adozione
+  di qualche accorgimento nella direzione che ci interessa. I commennti
+  spiegano l'organizzazionede del codice.
+</p>
+<pre><code class="language-c">int main() {
+
+  int res = 0;
+  
+  struct {
+    apr_status_t init, pool;
+  } st = {0, 0};
+  
+  st.init = apr_initialize() == APR_SUCCESS;
+  
+  apr_pool_t *mp;
+  if (st.init) {
+    st.pool = apr_pool_create(&mp, NULL) == APR_SUCCESS;
+  }
+
+  if (st.pool) {
+    res = 1;
+  }
+
+  if (res <= 0) {
+    if (!st.init) {
+      printf("Errore di inizializzazione.\n");
+    } else if (!st.pool) {
+      printf("Errore di allocazione del pool di memoria.\n");
+    } else {
+      printf("Errore generico.\n");
+    }
+  }
+
+  if (st.pool)
+    apr_pool_destroy(mp);
+  if (st.init)
+    apr_terminate();
+
+  exit(EXIT_SUCCESS);
+}
+</code></pre>
+<!-- ----------------------------------------------------------------------- -->
+
+
+
+  <!-- hr>
 <a name="Legal-Issues"></a>
 <div class="header">
 <p>
-Next: <a href="#Design-Advice" accesskey="n" rel="next">Design Advice</a>, Previous: <a href="#Preface" accesskey="p" rel="prev">Preface</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Design-Advice" accesskey="n" rel="next">Design Advice</a>, Previous: <a href="#Preface" accesskey="p" rel="prev">Preface</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Keeping-Free-Software-Free"></a>
-<h2 class="chapter">2 Keeping Free Software Free</h2>
+<h2 class="chapter font-anton">2 Keeping Free Software Free</h2>
 <a name="index-legal-aspects"></a>
 
 <p>This chapter discusses how you can make sure that GNU software
@@ -308,7 +301,7 @@ avoids legal difficulties, and other related issues.
 <a name="Reading-Non_002dFree-Code"></a>
 <div class="header">
 <p>
-Next: <a href="#Contributions" accesskey="n" rel="next">Contributions</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Contributions" accesskey="n" rel="next">Contributions</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Referring-to-Proprietary-Programs"></a>
 <h3 class="section">2.1 Referring to Proprietary Programs</h3>
@@ -350,7 +343,7 @@ to free memory, or use a new GNU facility such as obstacks.
 <a name="Contributions"></a>
 <div class="header">
 <p>
-Next: <a href="#Trademarks" accesskey="n" rel="next">Trademarks</a>, Previous: <a href="#Reading-Non_002dFree-Code" accesskey="p" rel="prev">Reading Non-Free Code</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Trademarks" accesskey="n" rel="next">Trademarks</a>, Previous: <a href="#Reading-Non_002dFree-Code" accesskey="p" rel="prev">Reading Non-Free Code</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Accepting-Contributions"></a>
 <h3 class="section">2.2 Accepting Contributions</h3>
@@ -403,7 +396,7 @@ or not), please take a look: see <a href="http://www.gnu.org/prep/maintain/maint
 <a name="Trademarks"></a>
 <div class="header">
 <p>
-Previous: <a href="#Contributions" accesskey="p" rel="prev">Contributions</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Contributions" accesskey="p" rel="prev">Contributions</a>, Up: <a href="#Legal-Issues" accesskey="u" rel="up">Legal Issues</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Trademarks-1"></a>
 <h3 class="section">2.3 Trademarks</h3>
@@ -438,10 +431,10 @@ GNU packages.  Please write &ldquo;Windows&rdquo; in full, or abbreviate it to
 <a name="Design-Advice"></a>
 <div class="header">
 <p>
-Next: <a href="#Program-Behavior" accesskey="n" rel="next">Program Behavior</a>, Previous: <a href="#Legal-Issues" accesskey="p" rel="prev">Legal Issues</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Program-Behavior" accesskey="n" rel="next">Program Behavior</a>, Previous: <a href="#Legal-Issues" accesskey="p" rel="prev">Legal Issues</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="General-Program-Design"></a>
-<h2 class="chapter">3 General Program Design</h2>
+<h2 class="chapter font-anton">3 General Program Design</h2>
 <a name="index-program-design"></a>
 
 <p>This chapter discusses some of the issues you should take into
@@ -466,7 +459,7 @@ account when designing your program.
 <a name="Source-Language"></a>
 <div class="header">
 <p>
-Next: <a href="#Compatibility" accesskey="n" rel="next">Compatibility</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Compatibility" accesskey="n" rel="next">Compatibility</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Which-Languages-to-Use"></a>
 <h3 class="section">3.1 Which Languages to Use</h3>
@@ -506,7 +499,7 @@ GNU system.
 <a name="Compatibility"></a>
 <div class="header">
 <p>
-Next: <a href="#Using-Extensions" accesskey="n" rel="next">Using Extensions</a>, Previous: <a href="#Source-Language" accesskey="p" rel="prev">Source Language</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Using-Extensions" accesskey="n" rel="next">Using Extensions</a>, Previous: <a href="#Source-Language" accesskey="p" rel="prev">Source Language</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Compatibility-with-Other-Implementations"></a>
 <h3 class="section">3.2 Compatibility with Other Implementations</h3>
@@ -550,7 +543,7 @@ there is any precedent for them.
 <a name="Using-Extensions"></a>
 <div class="header">
 <p>
-Next: <a href="#Standard-C" accesskey="n" rel="next">Standard C</a>, Previous: <a href="#Compatibility" accesskey="p" rel="prev">Compatibility</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Standard-C" accesskey="n" rel="next">Standard C</a>, Previous: <a href="#Compatibility" accesskey="p" rel="prev">Compatibility</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Using-Non_002dstandard-Features"></a>
 <h3 class="section">3.3 Using Non-standard Features</h3>
@@ -588,7 +581,7 @@ already.  That would be extremely troublesome in certain cases.
 <a name="Standard-C"></a>
 <div class="header">
 <p>
-Next: <a href="#Conditional-Compilation" accesskey="n" rel="next">Conditional Compilation</a>, Previous: <a href="#Using-Extensions" accesskey="p" rel="prev">Using Extensions</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Conditional-Compilation" accesskey="n" rel="next">Conditional Compilation</a>, Previous: <a href="#Using-Extensions" accesskey="p" rel="prev">Using Extensions</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standard-C-and-Pre_002dStandard-C"></a>
 <h3 class="section">3.4 Standard C and Pre-Standard C</h3>
@@ -671,7 +664,7 @@ prototypes, you may want to use a preprocessor macro like this:
 <a name="Conditional-Compilation"></a>
 <div class="header">
 <p>
-Previous: <a href="#Standard-C" accesskey="p" rel="prev">Standard C</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Standard-C" accesskey="p" rel="prev">Standard C</a>, Up: <a href="#Design-Advice" accesskey="u" rel="up">Design Advice</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Conditional-Compilation-1"></a>
 <h3 class="section">3.5 Conditional Compilation</h3>
@@ -726,10 +719,10 @@ an easy workaround.  Simply introduce another macro
 <a name="Program-Behavior"></a>
 <div class="header">
 <p>
-Next: <a href="#Writing-C" accesskey="n" rel="next">Writing C</a>, Previous: <a href="#Design-Advice" accesskey="p" rel="prev">Design Advice</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Writing-C" accesskey="n" rel="next">Writing C</a>, Previous: <a href="#Design-Advice" accesskey="p" rel="prev">Design Advice</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Program-Behavior-for-All-Programs"></a>
-<h2 class="chapter">4 Program Behavior for All Programs</h2>
+<h2 class="chapter font-anton">4 Program Behavior for All Programs</h2>
 
 <p>This chapter describes conventions for writing robust
 software.  It also describes general standards for error messages, the
@@ -770,7 +763,7 @@ command line interface, and how libraries should behave.
 <a name="Non_002dGNU-Standards"></a>
 <div class="header">
 <p>
-Next: <a href="#Semantics" accesskey="n" rel="next">Semantics</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Semantics" accesskey="n" rel="next">Semantics</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Non_002dGNU-Standards-1"></a>
 <h3 class="section">4.1 Non-GNU Standards</h3>
@@ -821,7 +814,7 @@ merely because a standard says it is &ldquo;forbidden&rdquo; or &ldquo;deprecate
 <a name="Semantics"></a>
 <div class="header">
 <p>
-Next: <a href="#Libraries" accesskey="n" rel="next">Libraries</a>, Previous: <a href="#Non_002dGNU-Standards" accesskey="p" rel="prev">Non-GNU Standards</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Libraries" accesskey="n" rel="next">Libraries</a>, Previous: <a href="#Non_002dGNU-Standards" accesskey="p" rel="prev">Non-GNU Standards</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Writing-Robust-Programs"></a>
 <h3 class="section">4.2 Writing Robust Programs</h3>
@@ -934,7 +927,7 @@ solution for creating temporary files from shell scripts
 <a name="Libraries"></a>
 <div class="header">
 <p>
-Next: <a href="#Errors" accesskey="n" rel="next">Errors</a>, Previous: <a href="#Semantics" accesskey="p" rel="prev">Semantics</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Errors" accesskey="n" rel="next">Errors</a>, Previous: <a href="#Semantics" accesskey="p" rel="prev">Semantics</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Library-Behavior"></a>
 <h3 class="section">4.3 Library Behavior</h3>
@@ -970,7 +963,7 @@ fit any naming convention.
 <a name="Errors"></a>
 <div class="header">
 <p>
-Next: <a href="#User-Interfaces" accesskey="n" rel="next">User Interfaces</a>, Previous: <a href="#Libraries" accesskey="p" rel="prev">Libraries</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#User-Interfaces" accesskey="n" rel="next">User Interfaces</a>, Previous: <a href="#Libraries" accesskey="p" rel="prev">Libraries</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Formatting-Error-Messages"></a>
 <h3 class="section">4.4 Formatting Error Messages</h3>
@@ -1057,7 +1050,7 @@ end with a period.
 <a name="User-Interfaces"></a>
 <div class="header">
 <p>
-Next: <a href="#Finding-Program-Files" accesskey="n" rel="next">Finding Program Files</a>, Previous: <a href="#Errors" accesskey="p" rel="prev">Errors</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Finding-Program-Files" accesskey="n" rel="next">Finding Program Files</a>, Previous: <a href="#Errors" accesskey="p" rel="prev">Errors</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standards-for-Interfaces-Generally"></a>
 <h3 class="section">4.5 Standards for Interfaces Generally</h3>
@@ -1110,7 +1103,7 @@ multi-column format.
 <a name="Finding-Program-Files"></a>
 <div class="header">
 <p>
-Next: <a href="#Graphical-Interfaces" accesskey="n" rel="next">Graphical Interfaces</a>, Previous: <a href="#User-Interfaces" accesskey="p" rel="prev">User Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Graphical-Interfaces" accesskey="n" rel="next">Graphical Interfaces</a>, Previous: <a href="#User-Interfaces" accesskey="p" rel="prev">User Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Finding-the-Program_0027s-Executable-and-Associated-Files"></a>
 <h3 class="section">4.6 Finding the Program&rsquo;s Executable and Associated Files</h3>
@@ -1181,7 +1174,7 @@ for more information about <code>PATH</code>.
 <a name="Graphical-Interfaces"></a>
 <div class="header">
 <p>
-Next: <a href="#Command_002dLine-Interfaces" accesskey="n" rel="next">Command-Line Interfaces</a>, Previous: <a href="#Finding-Program-Files" accesskey="p" rel="prev">Finding Program Files</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Command_002dLine-Interfaces" accesskey="n" rel="next">Command-Line Interfaces</a>, Previous: <a href="#Finding-Program-Files" accesskey="p" rel="prev">Finding Program Files</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standards-for-Graphical-Interfaces"></a>
 <h3 class="section">4.7 Standards for Graphical Interfaces</h3>
@@ -1224,7 +1217,7 @@ be automatic if you use GTK+.
 <a name="Command_002dLine-Interfaces"></a>
 <div class="header">
 <p>
-Next: <a href="#Dynamic-Plug_002dIn-Interfaces" accesskey="n" rel="next">Dynamic Plug-In Interfaces</a>, Previous: <a href="#Graphical-Interfaces" accesskey="p" rel="prev">Graphical Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Dynamic-Plug_002dIn-Interfaces" accesskey="n" rel="next">Dynamic Plug-In Interfaces</a>, Previous: <a href="#Graphical-Interfaces" accesskey="p" rel="prev">Graphical Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standards-for-Command-Line-Interfaces"></a>
 <h3 class="section">4.8 Standards for Command Line Interfaces</h3>
@@ -1280,7 +1273,7 @@ command line.
 <a name="g_t_002d_002dversion"></a>
 <div class="header">
 <p>
-Next: <a href="#g_t_002d_002dhelp" accesskey="n" rel="next">--help</a>, Up: <a href="#Command_002dLine-Interfaces" accesskey="u" rel="up">Command-Line Interfaces</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#g_t_002d_002dhelp" accesskey="n" rel="next">--help</a>, Up: <a href="#Command_002dLine-Interfaces" accesskey="u" rel="up">Command-Line Interfaces</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="g_t_002d_002dversion-1"></a>
 <h4 class="subsection">4.8.1 <samp>--version</samp></h4>
@@ -1461,7 +1454,7 @@ licensing web pages,
 <a name="g_t_002d_002dhelp"></a>
 <div class="header">
 <p>
-Previous: <a href="#g_t_002d_002dversion" accesskey="p" rel="prev">--version</a>, Up: <a href="#Command_002dLine-Interfaces" accesskey="u" rel="up">Command-Line Interfaces</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#g_t_002d_002dversion" accesskey="p" rel="prev">--version</a>, Up: <a href="#Command_002dLine-Interfaces" accesskey="u" rel="up">Command-Line Interfaces</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="g_t_002d_002dhelp-1"></a>
 <h4 class="subsection">4.8.2 <samp>--help</samp></h4>
@@ -1493,7 +1486,7 @@ General help using GNU software: &lt;https://www.gnu.org/gethelp/&gt;
 <a name="Dynamic-Plug_002dIn-Interfaces"></a>
 <div class="header">
 <p>
-Next: <a href="#Option-Table" accesskey="n" rel="next">Option Table</a>, Previous: <a href="#Command_002dLine-Interfaces" accesskey="p" rel="prev">Command-Line Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Option-Table" accesskey="n" rel="next">Option Table</a>, Previous: <a href="#Command_002dLine-Interfaces" accesskey="p" rel="prev">Command-Line Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standards-for-Dynamic-Plug_002din-Interfaces"></a>
 <h3 class="section">4.9 Standards for Dynamic Plug-in Interfaces</h3>
@@ -1536,7 +1529,7 @@ the plug-in developer understood that the license had this requirement.
 <a name="Option-Table"></a>
 <div class="header">
 <p>
-Next: <a href="#OID-Allocations" accesskey="n" rel="next">OID Allocations</a>, Previous: <a href="#Dynamic-Plug_002dIn-Interfaces" accesskey="p" rel="prev">Dynamic Plug-In Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#OID-Allocations" accesskey="n" rel="next">OID Allocations</a>, Previous: <a href="#Dynamic-Plug_002dIn-Interfaces" accesskey="p" rel="prev">Dynamic Plug-In Interfaces</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Table-of-Long-Options"></a>
 <h3 class="section">4.10 Table of Long Options</h3>
@@ -3011,7 +3004,7 @@ a directory to start processing with.
 <a name="OID-Allocations"></a>
 <div class="header">
 <p>
-Next: <a href="#Memory-Usage" accesskey="n" rel="next">Memory Usage</a>, Previous: <a href="#Option-Table" accesskey="p" rel="prev">Option Table</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Memory-Usage" accesskey="n" rel="next">Memory Usage</a>, Previous: <a href="#Option-Table" accesskey="p" rel="prev">Option Table</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="OID-Allocations-1"></a>
 <h3 class="section">4.11 OID Allocations</h3>
@@ -3085,7 +3078,7 @@ assigned:
 <a name="Memory-Usage"></a>
 <div class="header">
 <p>
-Next: <a href="#File-Usage" accesskey="n" rel="next">File Usage</a>, Previous: <a href="#OID-Allocations" accesskey="p" rel="prev">OID Allocations</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#File-Usage" accesskey="n" rel="next">File Usage</a>, Previous: <a href="#OID-Allocations" accesskey="p" rel="prev">OID Allocations</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Memory-Usage-1"></a>
 <h3 class="section">4.12 Memory Usage</h3>
@@ -3119,7 +3112,7 @@ free it simply to silence such a tool.
 <a name="File-Usage"></a>
 <div class="header">
 <p>
-Previous: <a href="#Memory-Usage" accesskey="p" rel="prev">Memory Usage</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Memory-Usage" accesskey="p" rel="prev">Memory Usage</a>, Up: <a href="#Program-Behavior" accesskey="u" rel="up">Program Behavior</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="File-Usage-1"></a>
 <h3 class="section">4.13 File Usage</h3>
@@ -3142,10 +3135,10 @@ directory.
 <a name="Writing-C"></a>
 <div class="header">
 <p>
-Next: <a href="#Documentation" accesskey="n" rel="next">Documentation</a>, Previous: <a href="#Program-Behavior" accesskey="p" rel="prev">Program Behavior</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Documentation" accesskey="n" rel="next">Documentation</a>, Previous: <a href="#Program-Behavior" accesskey="p" rel="prev">Program Behavior</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Making-The-Best-Use-of-C"></a>
-<h2 class="chapter">5 Making The Best Use of C</h2>
+<h2 class="chapter font-anton">5 Making The Best Use of C</h2>
 
 <p>This chapter provides advice on how best to use the C language
 when writing GNU software.
@@ -3179,7 +3172,7 @@ when writing GNU software.
 <a name="Formatting"></a>
 <div class="header">
 <p>
-Next: <a href="#Comments" accesskey="n" rel="next">Comments</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Comments" accesskey="n" rel="next">Comments</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Formatting-Your-Source-Code"></a>
 <h3 class="section">5.1 Formatting Your Source Code</h3>
@@ -3353,7 +3346,7 @@ page.  The formfeeds should appear alone on lines by themselves.
 <a name="Comments"></a>
 <div class="header">
 <p>
-Next: <a href="#Syntactic-Conventions" accesskey="n" rel="next">Syntactic Conventions</a>, Previous: <a href="#Formatting" accesskey="p" rel="prev">Formatting</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Syntactic-Conventions" accesskey="n" rel="next">Syntactic Conventions</a>, Previous: <a href="#Formatting" accesskey="p" rel="prev">Formatting</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Commenting-Your-Work"></a>
 <h3 class="section">5.2 Commenting Your Work</h3>
@@ -3451,7 +3444,7 @@ its sense</em>.  &lsquo;<samp>#else</samp>&rsquo; should have a comment describi
 <a name="Syntactic-Conventions"></a>
 <div class="header">
 <p>
-Next: <a href="#Names" accesskey="n" rel="next">Names</a>, Previous: <a href="#Comments" accesskey="p" rel="prev">Comments</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Names" accesskey="n" rel="next">Names</a>, Previous: <a href="#Comments" accesskey="p" rel="prev">Comments</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Clean-Use-of-C-Constructs"></a>
 <h3 class="section">5.3 Clean Use of C Constructs</h3>
@@ -3601,7 +3594,7 @@ if (foo == NULL)
 <a name="Names"></a>
 <div class="header">
 <p>
-Next: <a href="#System-Portability" accesskey="n" rel="next">System Portability</a>, Previous: <a href="#Syntactic-Conventions" accesskey="p" rel="prev">Syntactic Conventions</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#System-Portability" accesskey="n" rel="next">System Portability</a>, Previous: <a href="#Syntactic-Conventions" accesskey="p" rel="prev">Syntactic Conventions</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Naming-Variables_002c-Functions_002c-and-Files"></a>
 <h3 class="section">5.4 Naming Variables, Functions, and Files</h3>
@@ -3660,7 +3653,7 @@ characters.
 <a name="System-Portability"></a>
 <div class="header">
 <p>
-Next: <a href="#CPU-Portability" accesskey="n" rel="next">CPU Portability</a>, Previous: <a href="#Names" accesskey="p" rel="prev">Names</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#CPU-Portability" accesskey="n" rel="next">CPU Portability</a>, Previous: <a href="#Names" accesskey="p" rel="prev">Names</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Portability-between-System-Types"></a>
 <h3 class="section">5.5 Portability between System Types</h3>
@@ -3726,7 +3719,7 @@ to move your code into other GNU programs.
 <a name="CPU-Portability"></a>
 <div class="header">
 <p>
-Next: <a href="#System-Functions" accesskey="n" rel="next">System Functions</a>, Previous: <a href="#System-Portability" accesskey="p" rel="prev">System Portability</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#System-Functions" accesskey="n" rel="next">System Functions</a>, Previous: <a href="#System-Portability" accesskey="p" rel="prev">System Portability</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Portability-between-CPUs"></a>
 <h3 class="section">5.6 Portability between CPUs</h3>
@@ -3802,7 +3795,7 @@ from zero.
 <a name="System-Functions"></a>
 <div class="header">
 <p>
-Next: <a href="#Internationalization" accesskey="n" rel="next">Internationalization</a>, Previous: <a href="#CPU-Portability" accesskey="p" rel="prev">CPU Portability</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Internationalization" accesskey="n" rel="next">Internationalization</a>, Previous: <a href="#CPU-Portability" accesskey="p" rel="prev">CPU Portability</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Calling-System-Functions"></a>
 <h3 class="section">5.7 Calling System Functions</h3>
@@ -3881,7 +3874,7 @@ for many more details.
 <a name="Internationalization"></a>
 <div class="header">
 <p>
-Next: <a href="#Character-Set" accesskey="n" rel="next">Character Set</a>, Previous: <a href="#System-Functions" accesskey="p" rel="prev">System Functions</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Character-Set" accesskey="n" rel="next">Character Set</a>, Previous: <a href="#System-Functions" accesskey="p" rel="prev">System Functions</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Internationalization-1"></a>
 <h3 class="section">5.8 Internationalization</h3>
@@ -4006,7 +3999,7 @@ and one for the rest.  The GNU <code>ngettext</code> function solves this proble
 <a name="Character-Set"></a>
 <div class="header">
 <p>
-Next: <a href="#Quote-Characters" accesskey="n" rel="next">Quote Characters</a>, Previous: <a href="#Internationalization" accesskey="p" rel="prev">Internationalization</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Quote-Characters" accesskey="n" rel="next">Quote Characters</a>, Previous: <a href="#Internationalization" accesskey="p" rel="prev">Internationalization</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Character-Set-1"></a>
 <h3 class="section">5.9 Character Set</h3>
@@ -4033,7 +4026,7 @@ be the best choice.
 <a name="Quote-Characters"></a>
 <div class="header">
 <p>
-Next: <a href="#Mmap" accesskey="n" rel="next">Mmap</a>, Previous: <a href="#Character-Set" accesskey="p" rel="prev">Character Set</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Mmap" accesskey="n" rel="next">Mmap</a>, Previous: <a href="#Character-Set" accesskey="p" rel="prev">Character Set</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Quote-Characters-1"></a>
 <h3 class="section">5.10 Quote Characters</h3>
@@ -4085,7 +4078,7 @@ the option <samp>--quoting-style</samp> of GNU <code>ls</code>.
 <a name="Mmap"></a>
 <div class="header">
 <p>
-Previous: <a href="#Quote-Characters" accesskey="p" rel="prev">Quote Characters</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Quote-Characters" accesskey="p" rel="prev">Quote Characters</a>, Up: <a href="#Writing-C" accesskey="u" rel="up">Writing C</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Mmap-1"></a>
 <h3 class="section">5.11 Mmap</h3>
@@ -4110,10 +4103,10 @@ all these kinds of files.
 <a name="Documentation"></a>
 <div class="header">
 <p>
-Next: <a href="#Managing-Releases" accesskey="n" rel="next">Managing Releases</a>, Previous: <a href="#Writing-C" accesskey="p" rel="prev">Writing C</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Managing-Releases" accesskey="n" rel="next">Managing Releases</a>, Previous: <a href="#Writing-C" accesskey="p" rel="prev">Writing C</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Documenting-Programs"></a>
-<h2 class="chapter">6 Documenting Programs</h2>
+<h2 class="chapter font-anton">6 Documenting Programs</h2>
 <a name="index-documentation"></a>
 
 <p>A GNU program should ideally come with full free documentation, adequate
@@ -4149,7 +4142,7 @@ extending it, as well as just using it.
 <a name="GNU-Manuals"></a>
 <div class="header">
 <p>
-Next: <a href="#Doc-Strings-and-Manuals" accesskey="n" rel="next">Doc Strings and Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Doc-Strings-and-Manuals" accesskey="n" rel="next">Doc Strings and Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="GNU-Manuals-1"></a>
 <h3 class="section">6.1 GNU Manuals</h3>
@@ -4303,7 +4296,7 @@ seconds.&rdquo;
 <a name="Doc-Strings-and-Manuals"></a>
 <div class="header">
 <p>
-Next: <a href="#Manual-Structure-Details" accesskey="n" rel="next">Manual Structure Details</a>, Previous: <a href="#GNU-Manuals" accesskey="p" rel="prev">GNU Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Manual-Structure-Details" accesskey="n" rel="next">Manual Structure Details</a>, Previous: <a href="#GNU-Manuals" accesskey="p" rel="prev">GNU Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Doc-Strings-and-Manuals-1"></a>
 <h3 class="section">6.2 Doc Strings and Manuals</h3>
@@ -4336,7 +4329,7 @@ is to use them as a source of information for writing good text.
 <a name="Manual-Structure-Details"></a>
 <div class="header">
 <p>
-Next: <a href="#License-for-Manuals" accesskey="n" rel="next">License for Manuals</a>, Previous: <a href="#Doc-Strings-and-Manuals" accesskey="p" rel="prev">Doc Strings and Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#License-for-Manuals" accesskey="n" rel="next">License for Manuals</a>, Previous: <a href="#Doc-Strings-and-Manuals" accesskey="p" rel="prev">Doc Strings and Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Manual-Structure-Details-1"></a>
 <h3 class="section">6.3 Manual Structure Details</h3>
@@ -4371,7 +4364,7 @@ each program described in the manual.
 <a name="License-for-Manuals"></a>
 <div class="header">
 <p>
-Next: <a href="#Manual-Credits" accesskey="n" rel="next">Manual Credits</a>, Previous: <a href="#Manual-Structure-Details" accesskey="p" rel="prev">Manual Structure Details</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Manual-Credits" accesskey="n" rel="next">Manual Credits</a>, Previous: <a href="#Manual-Structure-Details" accesskey="p" rel="prev">Manual Structure Details</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="License-for-Manuals-1"></a>
 <h3 class="section">6.4 License for Manuals</h3>
@@ -4396,7 +4389,7 @@ the program&rsquo;s license, it is probably better not to include it.
 <a name="Manual-Credits"></a>
 <div class="header">
 <p>
-Next: <a href="#Printed-Manuals" accesskey="n" rel="next">Printed Manuals</a>, Previous: <a href="#License-for-Manuals" accesskey="p" rel="prev">License for Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Printed-Manuals" accesskey="n" rel="next">Printed Manuals</a>, Previous: <a href="#License-for-Manuals" accesskey="p" rel="prev">License for Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Manual-Credits-1"></a>
 <h3 class="section">6.5 Manual Credits</h3>
@@ -4411,7 +4404,7 @@ company as an author.
 <a name="Printed-Manuals"></a>
 <div class="header">
 <p>
-Next: <a href="#NEWS-File" accesskey="n" rel="next">NEWS File</a>, Previous: <a href="#Manual-Credits" accesskey="p" rel="prev">Manual Credits</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#NEWS-File" accesskey="n" rel="next">NEWS File</a>, Previous: <a href="#Manual-Credits" accesskey="p" rel="prev">Manual Credits</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Printed-Manuals-1"></a>
 <h3 class="section">6.6 Printed Manuals</h3>
@@ -4430,7 +4423,7 @@ user can print out the manual from the sources.
 <a name="NEWS-File"></a>
 <div class="header">
 <p>
-Next: <a href="#Change-Logs" accesskey="n" rel="next">Change Logs</a>, Previous: <a href="#Printed-Manuals" accesskey="p" rel="prev">Printed Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Change-Logs" accesskey="n" rel="next">Change Logs</a>, Previous: <a href="#Printed-Manuals" accesskey="p" rel="prev">Printed Manuals</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="The-NEWS-File"></a>
 <h3 class="section">6.7 The NEWS File</h3>
@@ -4451,7 +4444,7 @@ user to that file.
 <a name="Change-Logs"></a>
 <div class="header">
 <p>
-Next: <a href="#Man-Pages" accesskey="n" rel="next">Man Pages</a>, Previous: <a href="#NEWS-File" accesskey="p" rel="prev">NEWS File</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Man-Pages" accesskey="n" rel="next">Man Pages</a>, Previous: <a href="#NEWS-File" accesskey="p" rel="prev">NEWS File</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Change-Logs-1"></a>
 <h3 class="section">6.8 Change Logs</h3>
@@ -4544,7 +4537,7 @@ you.
 <a name="Change-Log-Concepts"></a>
 <div class="header">
 <p>
-Next: <a href="#Style-of-Change-Logs" accesskey="n" rel="next">Style of Change Logs</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Style-of-Change-Logs" accesskey="n" rel="next">Style of Change Logs</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Change-Log-Concepts-and-Conventions"></a>
 <h4 class="subsection">6.8.1 Change Log Concepts and Conventions</h4>
@@ -4668,7 +4661,7 @@ commit messages.
 <a name="Style-of-Change-Logs"></a>
 <div class="header">
 <p>
-Next: <a href="#Simple-Changes" accesskey="n" rel="next">Simple Changes</a>, Previous: <a href="#Change-Log-Concepts" accesskey="p" rel="prev">Change Log Concepts</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Simple-Changes" accesskey="n" rel="next">Simple Changes</a>, Previous: <a href="#Change-Log-Concepts" accesskey="p" rel="prev">Change Log Concepts</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Style-of-Change-Logs-1"></a>
 <h4 class="subsection">6.8.2 Style of Change Logs</h4>
@@ -4788,7 +4781,7 @@ format-patch</kbd> to prepare the patches.
 <a name="Simple-Changes"></a>
 <div class="header">
 <p>
-Next: <a href="#Conditional-Changes" accesskey="n" rel="next">Conditional Changes</a>, Previous: <a href="#Style-of-Change-Logs" accesskey="p" rel="prev">Style of Change Logs</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Conditional-Changes" accesskey="n" rel="next">Conditional Changes</a>, Previous: <a href="#Style-of-Change-Logs" accesskey="p" rel="prev">Style of Change Logs</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Simple-Changes-1"></a>
 <h4 class="subsection">6.8.3 Simple Changes</h4>
@@ -4852,7 +4845,7 @@ manuals.
 <a name="Conditional-Changes"></a>
 <div class="header">
 <p>
-Next: <a href="#Indicating-the-Part-Changed" accesskey="n" rel="next">Indicating the Part Changed</a>, Previous: <a href="#Simple-Changes" accesskey="p" rel="prev">Simple Changes</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Indicating-the-Part-Changed" accesskey="n" rel="next">Indicating the Part Changed</a>, Previous: <a href="#Simple-Changes" accesskey="p" rel="prev">Simple Changes</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Conditional-Changes-1"></a>
 <h4 class="subsection">6.8.4 Conditional Changes</h4>
@@ -4922,7 +4915,7 @@ a certain macro is <em>not</em> defined:
 <a name="Indicating-the-Part-Changed"></a>
 <div class="header">
 <p>
-Previous: <a href="#Conditional-Changes" accesskey="p" rel="prev">Conditional Changes</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Conditional-Changes" accesskey="p" rel="prev">Conditional Changes</a>, Up: <a href="#Change-Logs" accesskey="u" rel="up">Change Logs</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Indicating-the-Part-Changed-1"></a>
 <h4 class="subsection">6.8.5 Indicating the Part Changed</h4>
@@ -4942,7 +4935,7 @@ user-specified option string is empty.
 <a name="Man-Pages"></a>
 <div class="header">
 <p>
-Next: <a href="#Reading-other-Manuals" accesskey="n" rel="next">Reading other Manuals</a>, Previous: <a href="#Change-Logs" accesskey="p" rel="prev">Change Logs</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Reading-other-Manuals" accesskey="n" rel="next">Reading other Manuals</a>, Previous: <a href="#Change-Logs" accesskey="p" rel="prev">Change Logs</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Man-Pages-1"></a>
 <h3 class="section">6.9 Man Pages</h3>
@@ -4993,7 +4986,7 @@ This is sufficient in many cases.
 <a name="Reading-other-Manuals"></a>
 <div class="header">
 <p>
-Previous: <a href="#Man-Pages" accesskey="p" rel="prev">Man Pages</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Man-Pages" accesskey="p" rel="prev">Man Pages</a>, Up: <a href="#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Reading-other-Manuals-1"></a>
 <h3 class="section">6.10 Reading other Manuals</h3>
@@ -5014,10 +5007,10 @@ with the FSF about the individual case.
 <a name="Managing-Releases"></a>
 <div class="header">
 <p>
-Next: <a href="#References" accesskey="n" rel="next">References</a>, Previous: <a href="#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#References" accesskey="n" rel="next">References</a>, Previous: <a href="#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="The-Release-Process"></a>
-<h2 class="chapter">7 The Release Process</h2>
+<h2 class="chapter font-anton">7 The Release Process</h2>
 <a name="index-releasing"></a>
 
 <p>Making a release is more than just bundling up your source files in a
@@ -5041,7 +5034,7 @@ all GNU software.
 <a name="Configuration"></a>
 <div class="header">
 <p>
-Next: <a href="#Makefile-Conventions" accesskey="n" rel="next">Makefile Conventions</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Makefile-Conventions" accesskey="n" rel="next">Makefile Conventions</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="How-Configuration-Should-Work"></a>
 <h3 class="section">7.1 How Configuration Should Work</h3>
@@ -5254,7 +5247,7 @@ ignore most of its arguments.
 <a name="Makefile-Conventions"></a>
 <div class="header">
 <p>
-Next: <a href="#Releases" accesskey="n" rel="next">Releases</a>, Previous: <a href="#Configuration" accesskey="p" rel="prev">Configuration</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Releases" accesskey="n" rel="next">Releases</a>, Previous: <a href="#Configuration" accesskey="p" rel="prev">Configuration</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Makefile-Conventions-1"></a>
 <h3 class="section">7.2 Makefile Conventions</h3>
@@ -5292,7 +5285,7 @@ conventions.  For more information on portable Makefiles, see
 <a name="Makefile-Basics"></a>
 <div class="header">
 <p>
-Next: <a href="#Utilities-in-Makefiles" accesskey="n" rel="next">Utilities in Makefiles</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Utilities-in-Makefiles" accesskey="n" rel="next">Utilities in Makefiles</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="General-Conventions-for-Makefiles"></a>
 <h4 class="subsection">7.2.1 General Conventions for Makefiles</h4>
@@ -5387,7 +5380,7 @@ subtargets) work correctly with a parallel <code>make</code>.
 <a name="Utilities-in-Makefiles"></a>
 <div class="header">
 <p>
-Next: <a href="#Command-Variables" accesskey="n" rel="next">Command Variables</a>, Previous: <a href="#Makefile-Basics" accesskey="p" rel="prev">Makefile Basics</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Command-Variables" accesskey="n" rel="next">Command Variables</a>, Previous: <a href="#Makefile-Basics" accesskey="p" rel="prev">Makefile Basics</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Utilities-in-Makefiles-1"></a>
 <h4 class="subsection">7.2.2 Utilities in Makefiles</h4>
@@ -5462,7 +5455,7 @@ exist.
 <a name="Command-Variables"></a>
 <div class="header">
 <p>
-Next: <a href="#DESTDIR" accesskey="n" rel="next">DESTDIR</a>, Previous: <a href="#Utilities-in-Makefiles" accesskey="p" rel="prev">Utilities in Makefiles</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#DESTDIR" accesskey="n" rel="next">DESTDIR</a>, Previous: <a href="#Utilities-in-Makefiles" accesskey="p" rel="prev">Utilities in Makefiles</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Variables-for-Specifying-Commands"></a>
 <h4 class="subsection">7.2.3 Variables for Specifying Commands</h4>
@@ -5546,7 +5539,7 @@ command, with the final argument being a directory, as in:
 <a name="DESTDIR"></a>
 <div class="header">
 <p>
-Next: <a href="#Directory-Variables" accesskey="n" rel="next">Directory Variables</a>, Previous: <a href="#Command-Variables" accesskey="p" rel="prev">Command Variables</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Directory-Variables" accesskey="n" rel="next">Directory Variables</a>, Previous: <a href="#Command-Variables" accesskey="p" rel="prev">Command Variables</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="DESTDIR_003a-Support-for-Staged-Installs"></a>
 <h4 class="subsection">7.2.4 <code>DESTDIR</code>: Support for Staged Installs</h4>
@@ -5608,7 +5601,7 @@ operations.  So, we strongly recommend GNU packages support
 <a name="Directory-Variables"></a>
 <div class="header">
 <p>
-Next: <a href="#Standard-Targets" accesskey="n" rel="next">Standard Targets</a>, Previous: <a href="#DESTDIR" accesskey="p" rel="prev">DESTDIR</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Standard-Targets" accesskey="n" rel="next">Standard Targets</a>, Previous: <a href="#DESTDIR" accesskey="p" rel="prev">DESTDIR</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Variables-for-Installation-Directories"></a>
 <h4 class="subsection">7.2.5 Variables for Installation Directories</h4>
@@ -6000,7 +5993,7 @@ supports them.
 <a name="Standard-Targets"></a>
 <div class="header">
 <p>
-Next: <a href="#Install-Command-Categories" accesskey="n" rel="next">Install Command Categories</a>, Previous: <a href="#Directory-Variables" accesskey="p" rel="prev">Directory Variables</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Install-Command-Categories" accesskey="n" rel="next">Install Command Categories</a>, Previous: <a href="#Directory-Variables" accesskey="p" rel="prev">Directory Variables</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Standard-Targets-for-Users"></a>
 <h4 class="subsection">7.2.6 Standard Targets for Users</h4>
@@ -6349,7 +6342,7 @@ It should do nothing but create installation directories.
 <a name="Install-Command-Categories"></a>
 <div class="header">
 <p>
-Previous: <a href="#Standard-Targets" accesskey="p" rel="prev">Standard Targets</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Standard-Targets" accesskey="p" rel="prev">Standard Targets</a>, Up: <a href="#Makefile-Conventions" accesskey="u" rel="up">Makefile Conventions</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Install-Command-Categories-1"></a>
 <h4 class="subsection">7.2.7 Install Command Categories</h4>
@@ -6469,7 +6462,7 @@ $0 ~ /^pre-install[ \t]*$/ {on = 1}
 <a name="Releases"></a>
 <div class="header">
 <p>
-Previous: <a href="#Makefile-Conventions" accesskey="p" rel="prev">Makefile Conventions</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Makefile-Conventions" accesskey="p" rel="prev">Makefile Conventions</a>, Up: <a href="#Managing-Releases" accesskey="u" rel="up">Managing Releases</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Making-Releases"></a>
 <h3 class="section">7.3 Making Releases</h3>
@@ -6568,10 +6561,10 @@ other files to get.
 <a name="References"></a>
 <div class="header">
 <p>
-Next: <a href="#GNU-Free-Documentation-License" accesskey="n" rel="next">GNU Free Documentation License</a>, Previous: <a href="#Managing-Releases" accesskey="p" rel="prev">Managing Releases</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#GNU-Free-Documentation-License" accesskey="n" rel="next">GNU Free Documentation License</a>, Previous: <a href="#Managing-Releases" accesskey="p" rel="prev">Managing Releases</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="References-to-Non_002dFree-Software-and-Documentation"></a>
-<h2 class="chapter">8 References to Non-Free Software and Documentation</h2>
+<h2 class="chapter font-anton">8 References to Non-Free Software and Documentation</h2>
 <a name="index-references-to-non_002dfree-material"></a>
 
 <p>A GNU program should not recommend, promote, or grant legitimacy to
@@ -6713,7 +6706,7 @@ or find another place to refer to that information.
 <a name="GNU-Free-Documentation-License"></a>
 <div class="header">
 <p>
-Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#References" accesskey="p" rel="prev">References</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#References" accesskey="p" rel="prev">References</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="GNU-Free-Documentation-License-1"></a>
 <h2 class="appendix">Appendix A GNU Free Documentation License</h2>
@@ -7192,7 +7185,7 @@ to permit their use in free software.
 <a name="Index"></a>
 <div class="header">
 <p>
-Previous: <a href="#GNU-Free-Documentation-License" accesskey="p" rel="prev">GNU Free Documentation License</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#GNU-Free-Documentation-License" accesskey="p" rel="prev">GNU Free Documentation License</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#APRX_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <a name="Index-1"></a>
 <h2 class="unnumbered">Index</h2>
@@ -7533,9 +7526,27 @@ Previous: <a href="#GNU-Free-Documentation-License" accesskey="p" rel="prev">GNU
  &nbsp; 
 </td></tr></table>
 
+<hr -->
+
+
+</div>
+</main>
+<footer><div class="container">
+<!----------------------------------------------------------------------------->
 <hr>
-
-
-
-</body>
+<p class="mb-3 text-muted">
+    &copy; 2020-2023 Riccardo Vacirca
+    <a href="https://www.linkedin.com/in/riccardovacirca"><i class="fa fa-linkedin-square"></i></a>
+    <a href="https://github.com/riccardovacirca"><i class="fa fa-git-square"></i></a><br>
+    <small>All right reserved</small>
+</p>
+<!----------------------------------------------------------------------------->
+</div></footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
+<script>/** SQL highlighter for PrismJS <http://prismjs.com/> * @author Petros Kyladitis */ Prism.languages.sql={comment:{pattern:/(^|[^\\])(\/\*[\w\W]*?\*\/|((--)|(\/\/)).*?(\r?\n|$))/g,lookbehind:!0},string: /("|')(\\?.)*?\1/g,keyword:/\b(ACTION|ADD|AFTER|ALGORITHM|ALTER|ANALYZE|APPLY|AS|AS|ASC|AUTHORIZATION|BACKUP|BDB|BEGIN|BERKELEYDB|BIGINT|BINARY|BIT|BLOB|BOOL|BOOLEAN|BREAK|BROWSE|BTREE|BULK|BY|CALL|CASCADE|CASCADED|CASE|CHAIN|CHAR VARYING|CHARACTER VARYING|CHECK|CHECKPOINT|CLOSE|CLUSTERED|COALESCE|COLUMN|COLUMNS|COMMENT|COMMIT|COMMITTED|COMPUTE|CONNECT|CONSISTENT|CONSTRAINT|CONTAINS|CONTAINSTABLE|CONTINUE|CONVERT|CREATE|CROSS|CURRENT|CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|DATA|DATABASE|DATABASES|DATETIME|DBCC|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFINER|DELAYED|DELETE|DENY|DESC|DESCRIBE|DETERMINISTIC|DISABLE|DISCARD|DISK|DISTINCT|DISTINCTROW|DISTRIBUTED|DO|DOUBLE|DOUBLE PRECISION|DROP|DUMMY|DUMP|DUMPFILE|DUPLICATE KEY|ELSE|ENABLE|ENCLOSED BY|END|ENGINE|ENUM|ERRLVL|ERRORS|ESCAPE|ESCAPED BY|EXCEPT|EXEC|EXECUTE|EXIT|EXPLAIN|EXTENDED|FETCH|FIELDS|FILE|FILLFACTOR|FIRST|FIXED|FLOAT|FOLLOWING|FOR|FOR EACH ROW|FORCE|FOREIGN|FREETEXT|FREETEXTTABLE|FROM|FULL|FUNCTION|GEOMETRY|GEOMETRYCOLLECTION|GLOBAL|GOTO|GRANT|GROUP|HANDLER|HASH|HAVING|HOLDLOCK|IDENTITY|IDENTITY_INSERT|IDENTITYCOL|IF|IGNORE|IMPORT|INDEX|INFILE|INNER|INNODB|INOUT|INSERT|INT|INTEGER|INTERSECT|INTO|INVOKER|ISOLATION LEVEL|JOIN|KEY|KEYS|KILL|LANGUAGE SQL|LAST|LEFT|LIMIT|LINENO|LINES|LINESTRING|LOAD|LOCAL|LOCK|LONGBLOB|LONGTEXT|MATCH|MATCHED|MEDIUMBLOB|MEDIUMINT|MEDIUMTEXT|MERGE|MIDDLEINT|MODIFIES SQL DATA|MODIFY|MULTILINESTRING|MULTIPOINT|MULTIPOLYGON|NATIONAL|NATIONAL CHAR VARYING|NATIONAL CHARACTER|NATIONAL CHARACTER VARYING|NATIONAL VARCHAR|NATURAL|NCHAR|NCHAR VARCHAR|NEXT|NO|NO SQL|NOCHECK|NOCYCLE|NONCLUSTERED|NULLIF|NUMERIC|OF|OFF|OFFSETS|ON|OPEN|OPENDATASOURCE|OPENQUERY|OPENROWSET|OPTIMIZE|OPTION|OPTIONALLY|ORDER|OUT|OUTER|OUTFILE|OVER|PARTIAL|PARTITION|PERCENT|PIVOT|PLAN|POINT|POLYGON|PRECEDING|PRECISION|PREV|PRIMARY|PRINT|PRIVILEGES|PROC|PROCEDURE|PUBLIC|PURGE|QUICK|RAISERROR|READ|READS SQL DATA|READTEXT|REAL|RECONFIGURE|REFERENCES|RELEASE|RENAME|REPEATABLE|REPLICATION|REQUIRE|RESTORE|RESTRICT|RETURN|RETURNS|REVOKE|RIGHT|ROLLBACK|ROUTINE|ROWCOUNT|ROWGUIDCOL|ROWS?|RTREE|RULE|SAVE|SAVEPOINT|SCHEMA|SELECT|SERIAL|SERIALIZABLE|SESSION|SESSION_USER|SET|SETUSER|SHARE MODE|SHOW|SHUTDOWN|SIMPLE|SMALLINT|SNAPSHOT|SOME|SONAME|START|STARTING BY|STATISTICS|STATUS|STRIPED|SYSTEM_USER|TABLE|TABLES|TABLESPACE|TEMPORARY|TEMPTABLE|TERMINATED BY|TEXT|TEXTSIZE|THEN|TIMESTAMP|TINYBLOB|TINYINT|TINYTEXT|TO|TOP|TRAN|TRANSACTION|TRANSACTIONS|TRIGGER|TRUNCATE|TSEQUAL|TYPE|TYPES|UNBOUNDED|UNCOMMITTED|UNDEFINED|UNION|UNPIVOT|UPDATE|UPDATETEXT|USAGE|USE|USER|USING|VALUE|VALUES|VARBINARY|VARCHAR|VARCHARACTER|VARYING|VIEW|WAITFOR|WARNINGS|WHEN|WHERE|WHILE|WITH|WITH ROLLUP|WITHIN|WORK|WRITE|WRITETEXT)\b/gi,boolean:/\b(TRUE|FALSE|NULL)\b/gi,number:/\b-?(0x)?\d*\.?[\da-f]+\b/g,operator:/\b(ALL|AND|ANY|BETWEEN|EXISTS|IN|LIKE|NOT|OR|IS|UNIQUE|CHARACTER SET|COLLATE|DIV|OFFSET|REGEXP|RLIKE|SOUNDS LIKE|XOR)\b|[-+]{1}|!|=?&lt;|=?&gt;|={1}|(&amp;){1,2}|\|?\||\?|\*|\//gi,ignore:/&(lt|gt|amp);/gi,punctuation:/[;[\]()`,.]/g};</script>
+<script>/*$('#toast-1').toast('show');$('#toast-2').toast('show');*/</script>
 </html>
