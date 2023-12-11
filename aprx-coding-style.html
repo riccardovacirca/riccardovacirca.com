@@ -52,12 +52,30 @@
   .no-bullet {
     list-style: none;
   }
-  p {font-size: 16px;}
+  p {
+    font-size: 16px;
+  }
+  h4 {
+    font-weight: bold;
+  }
+  .header p {
+    font-size: 12px;
+  }
+  .lang {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: darkorange;
+  }
   </style>
 </head>
 <body><main><div id="main" class="container">
 <!-- ----------------------------------------------------------------------- -->
-<h1 class="display-5 font-anton logo">APRx coding style<div style="font-size:16px;font-family:Arial, Helvetica, sans-serif;color:darkorange;"><b>italiano</b></div></h1><br>
+<h1 class="display-5 font-anton logo mb-5">
+  APRx coding style
+  <div class="lang">italiano</div>
+</h1>
+
 <!-- ----------------------------------------------------------------------- -->
 <a name="APRX_Contents"></a>
 <h4 class="display-5 logo">Indice dei contenuti</h4>
@@ -155,7 +173,7 @@
 <!-- ----------------------------------------------------------------------- -->
 <a name="Top"></a>
 <!-- ----------------------------------------------------------------------- -->
-<hr>
+<hr class="mt-5">
 <a name="Preface"></a>
 <div class="header">
   <p>
@@ -167,22 +185,17 @@
   </p>
 </div>
 <a name="Introduzione"></a>
-<h4 class="chapter">Introduzione</h4>
-<p>La libreria APRx (Apache Portable Runtime eXtension) è una raccolta di
-  funzioni che hanno lo scopo di facilitare lo sviluppo di applicazioni basate
-  su APR, il runtime di Apache HTTP server.
-<p>Questo documento affronta gli aspetti relativi alla strutturazione
-  dei sorgenti che possono migliorare la qualità generale del codice prodotto.
-  Non si tratta qui, di aspetti legati semplicemente allo stile di scrittura
-  del codice, ma del ricorso a un insieme di tecniche di programmazione il cui
-  fine è quello di realizzare un codice pulito e ben strutturato, facile da
-  comprendere e intrinsecamente disaccoppiato.</p>
-<p>Queste tecniche sebbene di validità generale, diventano essenziali quando
-  ci si accosta alla programmazione in linguaggio C, spesso poco intuitiva e
-  la cui qualità complessiva dipende più che in altri linguaggi da
-  un'abitudine a una scrittura ordinata e ben strutturata.</p>
+<h4 class="chapter mb-3">Introduzione</h4>
+<p>Questo documento affronta aspetti di strutturazione delle unità funzionali
+  di un programma che possono migliorare la qualità generale del codice.
+  Non si tratta di aspetti legati semplicemente allo stile di scrittura,
+  di un insieme di tecniche il cui fine è quello di realizzare un codice pulito
+  e ben strutturato, facile da  comprendere e intrinsecamente disaccoppiato.</p>
+<p>Queste tecniche hanno spesso una importanza strategica nella programmazione
+  in linguaggio C, talvolta poco intuitiva e la cui qualità complessiva dipende
+  più che in altri linguaggi, da un'abitudine a una codifica ordinata e ben strutturata.</p>
 <!-- ----------------------------------------------------------------------- -->
-<hr>
+<hr class="mt-5">
 <a name="Skeleton"></a>
 <div class="header">
   <p>
@@ -194,55 +207,82 @@
   </p>
 </div>
 <a name="Skeleton"></a>
-<h4 class="chapter">Skeleton di un programma</h4>
-<p>Un programma basato su APR ha la seguente struttura di base:</p>
-<pre><code class="language-c">int main() {
-  
-  apr_status_t st;
-  st = apr_initialize();
-  
-  if (st != APR_SUCCESS) {
-    exit(EXIT_FAILURE);
+<h4 class="chapter mb-3">Skeleton di una funzione</h4>
+<p>Per definire la struttura di base di una funzione, distinguiamo tra
+  funzioni di utilità e funzioni della logica applicativa. Le prime dovrebbero
+  avere un codice estremamente compatto e uno stato definito in modo implicito
+  attraverso il contesto; dovrebbero essere scritte il logica positiva ed eseguire
+  un compito unico, atomico e ben definito che non implichi la validazione dell'input.
+  Le funzioni della logica applicativa, al contrario, dovrebbero implementare tutta
+  la complessità, prevedendo uno stato definito in modo esplicito, la validazione
+  dell'input e il controllo dell'errore; dovrebbero essere scritte in logica negativa
+  e garantire la correttezza dei parametri passati alle funzioni di utilità.</p>
+
+<pre><code class="language-c">// Utility function example
+char* join(apr_pool_t *mp, apr_array_header_t *ar) {
+  char *result = NULL, *s;
+  if (ar->nelts > 0) {
+    s = APR_ARRAY_IDX(ar, 0, char*);
+    if (s) {
+      result = apr_pstrdup(mp, s);
+    }
   }
-
-  apr_pool_t *mp;
-  st = apr_pool_create(&mp, NULL);
-  
-  if (st != APR_SUCCESS) {
-    exit(EXIT_FAILURE);
+  if (ar->nelts > 1) {
+    for (int i = 1; i < ar->nelts; i ++) {
+      s = APR_ARRAY_IDX(ar, i, char*);
+      if (s) {
+        result = apr_pstrcat(mp, ",", s, NULL);
+      }
+    }
   }
-
-  // Qui la logica applicativa
-
-  apr_pool_destroy(mp);
-  apr_terminate();
-  
-  exit(EXIT_SUCCESS);
+  return result;
 }
 </code></pre>
-<p>La spiegazione dettagliata delle istruzioni precedenti
-  è parte del tutorial sulla programmazione con APR. Quello che qui
-  interessa è la struttura del codice proposto.</p>
-<p>Nell'esempio mostrato, si ha una parte destinata all'inizializzazione
-  delle strutture dati e della memoria cui segue la logica applicativa della
-  funzione, quindi il rilascio delle risorse allocate. La dichiarazione
-  delle variabili, la loro inizializzazione e il controllo degli
-  errori è distribuito lungo tutto il corpo della funzione e quest'ultima,
-  sebbene formalmente corretta non suggerisce alcun tipo di organizzazione
-  strutturata del codice.</p>
-<p>Proponiamo adesso una seconda versione della funzione main con l'adozione
-  di qualche accorgimento nella direzione che ci interessa. I commennti
-  spiegano l'organizzazionede del codice.
-</p>
-<pre><code class="language-c">int main() {
+<p>La funzione non esegue alcuna valudazione dell'input. Dopo la dichiarazione
+  iniziale delle variabili locali viene eseguita una verifica del valore
+  <code>ar->nelts</code> senza un controllo della validità della struttura
+  dati <code>ar</code>. Questo è il modo corretto di scrivere una funzione di utilità;
+  il controllo sulla validità dell'input è delegato alla funzione chiamante.
+  Il codice, come di vede, è in logica positiva; i controlli hanno il solo scopo di
+  validare lo step successivo, mentre eventuali condizioni di errore non vengono
+  prese in considerazione.</p>
+<p>Proviamo adesso a delineare la struttura di una funzione della logica applicativa.
+  Lo schema generale è il seguente:</p>
 
-  int res = 0;
-  
+  <pre><code class="language-bash">// Application logic function
+ret_type func_name(input args) {
+  declare and initialize result
+    eg. int result = 0
+  declare and initialize function state
+    eg. struct { int input, ... } state = {0, ...}
+  validate input
+    eg. 
+  execute function logic
+  error checking
+  release local resources
+  return result
+}
+</code></pre>
+<p>
+  Il risultato è il seguente:
+</p>
+
+<pre><code class="language-c">int main(int argv, char **argv) {
+
+  // Inizializzazione del valore di ritorno
+  int result = 0;
+
+  // Inizializzazione dello stato
   struct {
-    apr_status_t init, pool;
-  } st = {0, 0};
-  
-  st.init = apr_initialize() == APR_SUCCESS;
+    int input, init, pool;
+  } st = {0, 0, 0};
+
+  // Validazione dell'input
+  st.input = (argv >= 2) && (strcmp(argv[1], "test") == 0);
+
+  if (st.input) {
+    st.init = apr_initialize() == APR_SUCCESS;
+  }
   
   apr_pool_t *mp;
   if (st.init) {
@@ -250,10 +290,12 @@
   }
 
   if (st.pool) {
-    res = 1;
+    result = 1;
   }
 
-  if (res <= 0) {
+  st.error = result != 1
+
+  if (st.error) {
     if (!st.init) {
       printf("Errore di inizializzazione.\n");
     } else if (!st.pool) {
@@ -263,10 +305,13 @@
     }
   }
 
-  if (st.pool)
+  if (st.pool) {
     apr_pool_destroy(mp);
-  if (st.init)
+  }
+
+  if (st.init) {
     apr_terminate();
+  }
 
   exit(EXIT_SUCCESS);
 }
@@ -7533,7 +7578,7 @@ Previous: <a href="#GNU-Free-Documentation-License" accesskey="p" rel="prev">GNU
 </main>
 <footer><div class="container">
 <!----------------------------------------------------------------------------->
-<hr>
+<hr class="mt-5">
 <p class="mb-3 text-muted">
     &copy; 2020-2023 Riccardo Vacirca
     <a href="https://www.linkedin.com/in/riccardovacirca"><i class="fa fa-linkedin-square"></i></a>
