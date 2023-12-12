@@ -186,14 +186,8 @@
 </div>
 <a name="Introduzione"></a>
 <h4 class="chapter mb-3">Introduzione</h4>
-<p>Questo documento affronta aspetti di strutturazione delle unità funzionali
-  di un programma che possono migliorare la qualità generale del codice.
-  Non si tratta di aspetti legati semplicemente allo stile di scrittura,
-  di un insieme di tecniche il cui fine è quello di realizzare un codice pulito
-  e ben strutturato, facile da  comprendere e intrinsecamente disaccoppiato.</p>
-<p>Queste tecniche hanno spesso una importanza strategica nella programmazione
-  in linguaggio C, talvolta poco intuitiva e la cui qualità complessiva dipende
-  più che in altri linguaggi, da un'abitudine a una codifica ordinata e ben strutturata.</p>
+<p>Questo documento fornisce indicazioni per la scrittura di codice ben strutturato
+  coerente e intrinsecamente disaccoppiato.</p>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
 <a name="Skeleton"></a>
@@ -207,18 +201,13 @@
   </p>
 </div>
 <a name="Skeleton"></a>
-<h4 class="chapter mb-3">Skeleton di una funzione</h4>
-<p>Per definire la struttura di base di una funzione, distinguiamo tra
-  funzioni di utilità e funzioni della logica applicativa. Le prime dovrebbero
-  avere un codice estremamente compatto e uno stato definito in modo implicito
-  attraverso il contesto; dovrebbero essere scritte il logica positiva ed eseguire
-  un compito unico, atomico e ben definito che non implichi la validazione dell'input.
-  Le funzioni della logica applicativa, al contrario, dovrebbero implementare tutta
-  la complessità, prevedendo uno stato definito in modo esplicito, la validazione
-  dell'input e il controllo dell'errore; dovrebbero essere scritte in logica negativa
-  e garantire la correttezza dei parametri passati alle funzioni di utilità.</p>
-
-<pre><code class="language-c">// Utility function example
+<h4 class="chapter mb-3">Funzioni helper</h4>
+<p>Le funzioni helper e le funzioni di utilità in genere, dovrebbero avere una
+  struttura compatta e uno stato definito in modo implicito in base al contesto;
+  dovrebbero essere scritte in logica positiva ed eseguire un compito unico, atomico
+  e ben definito senza validazione dell'input. L'esempio che segue mostra una funzione
+  che esegue il join di un array in una stringa.</p>
+<pre><code class="language-c">// Helper function example
 char* join(apr_pool_t *mp, apr_array_header_t *ar) {
   char *result = NULL, *s;
   if (ar->nelts > 0) {
@@ -238,89 +227,72 @@ char* join(apr_pool_t *mp, apr_array_header_t *ar) {
   return result;
 }
 </code></pre>
-<p>La funzione non esegue alcuna valudazione dell'input. Dopo la dichiarazione
-  iniziale delle variabili locali viene eseguita una verifica del valore
-  <code>ar->nelts</code> senza un controllo della validità della struttura
-  dati <code>ar</code>. Questo è il modo corretto di scrivere una funzione di utilità;
-  il controllo sulla validità dell'input è delegato alla funzione chiamante.
-  Il codice, come di vede, è in logica positiva; i controlli hanno il solo scopo di
-  validare lo step successivo, mentre eventuali condizioni di errore non vengono
-  prese in considerazione.</p>
-<p>Proviamo adesso a delineare la struttura di una funzione della logica applicativa.
-  Lo schema generale è il seguente:</p>
+<p>Come si vede dall'esempio, la correttezza dell'input è a carico della
+  procedura chiamante mentre il codice della funzione ha la sola logica funzionale
+  all'operazione implementata.</p>
+<!-- ----------------------------------------------------------------------- -->
+<hr class="mt-5">
+<a name="Skeleton"></a>
+<div class="header">
+  <p>
+    Next: <a href="#ProssimoArgomento" accesskey="n" rel="next">Prossimo argomento</a>,
+    Previous: <a href="#Preface" accesskey="p" rel="prev">Introduzione</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#APRX_Contents" title="Indice dei contenuti" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
+</div>
+<a name="Skeleton"></a>
+<h4 class="chapter mb-3">Funzioni della logica applicativa</h4>
+<p>Le funzioni della logica applicativa, dovrebero essere scritte in logica negativa
+  e dovrebbero prevedere almeno i seguenti componenti strutturali: dichiarazione e
+  inizializzazione del valore di ritorno e dello stato locale, validazione
+  dell'input, logica, controllo degli errori e valore di ritorno.</p>
+<pre><code class="language-c">// Restituisce i dati utente
+apr_table_t* user(apr_pool_t *mp, aprx_dbd_t *dbd, int id, char **er) {
 
-  <pre><code class="language-bash">// Application logic function
-ret_type func_name(input args) {
-  declare and initialize result
-    eg. int result = 0
-  declare and initialize function state
-    eg. struct { int input, ... } state = {0, ...}
-  validate input
-    eg. 
-  execute function logic
-  error checking
-  release local resources
-  return result
-}
-</code></pre>
-<p>
-  Il risultato è il seguente:
-</p>
+  apr_table_t *result = NULL;
 
-<pre><code class="language-c">int main(int argv, char **argv) {
+  struct state {
+    int input, query, resultset;
+  } st = {0};
 
-  // Inizializzazione del valore di ritorno
-  int result = 0;
+  do {
+    st.input = id > 0;
+    if (!st.input) break;
 
-  // Inizializzazione dello stato
-  struct {
-    int input, init, pool;
-  } st = {0, 0, 0};
+    const char sql[] = "SELECT id, name FROM users WHERE id=%d";
+    char *query = apr_psprintf(mp, sql, id);
+    st.query = query != NULL;
+    if (!st.query) break;
 
-  // Validazione dell'input
-  st.input = (argv >= 2) && (strcmp(argv[1], "test") == 0);
+    apr_array_header_t *resultset = aprx_dbd_select(mp, dbd, query);
+    st.resultset = resultset != NULL;
+    if (!st.resultset) break;
+    
+    if (resultset.nelts <= 0) break;
 
-  if (st.input) {
-    st.init = apr_initialize() == APR_SUCCESS;
-  }
-  
-  apr_pool_t *mp;
-  if (st.init) {
-    st.pool = apr_pool_create(&mp, NULL) == APR_SUCCESS;
-  }
+    result = APR_ARRAY_IDX(resultset, 0, apr_table_t*);
+  } while(0);
 
-  if (st.pool) {
-    result = 1;
-  }
-
-  st.error = result != 1
-
-  if (st.error) {
-    if (!st.init) {
-      printf("Errore di inizializzazione.\n");
-    } else if (!st.pool) {
-      printf("Errore di allocazione del pool di memoria.\n");
+  if (!result) {
+    if (!st.input) {
+      *er = apr_pstrdup(mp, "Input error");
+    } else if (!st.query) {
+      *er = apr_pstrdup(mp, "Query allocation error");
+    } else if (!st.resultset) {
+      *er = apr_pstrdup(mp, "Query result allocation error");
     } else {
-      printf("Errore generico.\n");
+      *er = apr_pstrdup(mp, "General error");
     }
   }
 
-  if (st.pool) {
-    apr_pool_destroy(mp);
-  }
-
-  if (st.init) {
-    apr_terminate();
-  }
-
-  exit(EXIT_SUCCESS);
+  return result;
 }
 </code></pre>
 <!-- ----------------------------------------------------------------------- -->
 
-
-
-  <!-- hr>
+<!-- hr>
 <a name="Legal-Issues"></a>
 <div class="header">
 <p>
