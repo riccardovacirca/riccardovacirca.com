@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+  <script>
+    // Definiamo una variabile per la base URL dell'API
+    const endp = '/qr?s=hello';
+
+    function qrcode(data) {
+      // Otteniamo il riferimento al canvas HTML
+      const canvas = document.getElementById("myCanvas");
+      // Otteniamo il contesto di rendering 2D del canvas
+      const ctx = canvas.getContext("2d");
+      const squareSize = 10;
+      // Impostiamo la dimensione del canvas
+      canvas.width = data.width * squareSize;
+      canvas.height = canvas.width;
+      // Definiamo la stringa di caratteri
+      // Definiamo la dimensione di ogni quadrato
+      
+      let code = data.code.split('-');
+      // Iteriamo sulla stringa di caratteri
+      for (let j = 0; j < code.length; j++) {
+        const y = j*squareSize;
+        const str = code[j];
+        for (let i = 0; i < str.length; i++) {
+          // Calcoliamo le coordinate x e y del quadrato corrente
+          const x = i * squareSize;
+          
+          // Disegniamo il quadrato corrente
+          if (str.charAt(i) === "1") {
+            ctx.fillStyle = "black";
+          } else {
+            ctx.fillStyle = "white";
+          }
+          ctx.fillRect(x, y, squareSize, squareSize);
+        }
+      }
+    }
+
+    // Funzione per effettuare una richiesta Ajax
+    function ajaxRequest(method, url, data) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            resolve(JSON.parse(xhr.responseText));
+          } else {
+            reject(xhr.statusText);
+          }
+        };
+        xhr.onerror = function() {
+          reject('Errore di connessione');
+        };
+        xhr.send(JSON.stringify(data));
+      });
+    }
+
+    ajaxRequest('GET', `${endp}`)
+      .then(data => {
+        if (data.err == 0) {
+          qrcode(data.obj);
+        }
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+</html>

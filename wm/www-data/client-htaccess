@@ -1,0 +1,10 @@
+<IfModule mod_headers.c>
+Header set X-Frame-Options SAMEORIGIN
+</IfModule>
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !\.html$
+RewriteRule .* index.php [L]
+</IfModule>
