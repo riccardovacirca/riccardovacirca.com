@@ -1,0 +1,1 @@
+LoadModule wm_auth_module /usr/lib/apache2/modules/mod_wm_auth.so
