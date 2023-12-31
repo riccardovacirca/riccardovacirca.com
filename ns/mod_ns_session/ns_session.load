@@ -1,0 +1,1 @@
+LoadModule ns_session_module /usr/lib/apache2/modules/mod_ns_session.so

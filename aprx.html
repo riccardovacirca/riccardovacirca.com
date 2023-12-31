@@ -76,59 +76,64 @@
   <div class="lang">italiano</div>
 </h1>
 <!-- ----------------------------------------------------------------------- -->
-<a name="APRX_Contents"></a>
-<h4 class="display-5 logo">Indice dei contenuti</h4>
+<a name="aprx_index"></a>
+<h4 class="display-5 logo">Indice delle funzioni</h4>
 <div class="contents">
   <ul class="no-bullet">
-    <li><a name="aprx-Introduzione" href="#Preface">Introduzione</a></li>
-    <li><a name="aprx-Skeleton-di-un-Programma" href="#Skeleton">Skeleton di un programma</a>
+    <li><a name="aprx_random" href="#aprx_random">aprx_random</a></li>
+    <li><a name="aprx_is_empty" href="#aprx_is_empty">aprx_is_empty</a></li>
   </ul>
 </div>
 <!-- ----------------------------------------------------------------------- -->
 <a name="Top"></a>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
-<a name="Introduzione"></a>
+<a name="aprx_random"></a>
 <div class="header">
   <p>
-    Next: <a href="#Organizzazione-di-un-progetto" accesskey="n" rel="next">Organizzazione di un progetto</a>,
+    Next: <a href="#aprx_is_empty" accesskey="n" rel="next">aprx_is_empty</a>,
     Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#APRX_Contents" title="Indice dei contenuti" rel="contents">Contents</a>]
+    [<a href="#aprx_index" title="Indice delle funzioni" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Introduzione</h4>
-<p>
-  APRX è una libreria di estensione di APR (Apache Portable Runtime)
-  e ha lo scopo di aggiungere a quest'ultimo, funzionalità in esso non
-  presenti e promuoverne l'adozione in ambito web.
-  Questa pagina documenta le funzioni di APRX e ne mostra esempi d'uso in un
-  contesto strutturato. Lo scenario di riferimento è quello di un modulo di
-  estensione del server HTTP Apache.
-</p>
+<h4 class="chapter mb-3">aprx_random</h4>
+<pre><code class="language-c">
+int aprx_rand(int l, int h) {
+  srand(time(NULL));
+  return l < h ? (rand() % (h - l + 1)) + l : 0;
+}
+</code></pre>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
-<a name="Organizzazione-di-un-progetto"></a>
+<a name="aprx_is_empty"></a>
 <div class="header">
   <p>
-    Next: <a href="#Operazioni" accesskey="n" rel="next">Operazioni</a>,
-    Previous: <a href="#Introduzione" accesskey="p" rel="prev">Introduzione</a>,
+    Next: <a href="#" accesskey="n" rel="next"></a>,
+    Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#APRX_Contents" title="Indice dei contenuti" rel="contents">Contents</a>]
+    [<a href="#aprx_index" title="Indice delle funzioni" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Organizzazione di un progetto</h4>
-<p>
-  Un progetto APRX è organizzato secondo quattro entità di programma: appplicazione,
-  moduli, controller e operazioni. L'applicazione è il livello più generale del
-  progetto. La sua logica è organizzata in moduli. Ogni modulo implementa un compito
-  specifico. Non esiste una gerarchia rigidamente definita e il modello è fortemente
-  disaccoppiato. Un modulo è costituito da un request handler e da uno o più controller
-  che implementano la logica applicativa. Infine le operazioni rappresentano unità
-  funzionali atomiche impiegate dai controller come utility o funzioni helper.
-</p>
+<h4 class="chapter mb-3">aprx_is_empty</h4>
+<pre><code class="language-c">
+int aprx_isempty(const char *s) {
+  int rv = 1;
+  if (s && (*s != '\0')) {
+    apr_size_t l = strlen(s);
+    for (apr_size_t i = 0; i < l; i ++) {
+      // La stringa non è vuota se contiene almeno un carattere non vuoto
+      if (!apr_isspace(s[i])) {
+        rv = 0;
+        break;
+      }
+    }
+  }
+  return rv;
+}
+</code></pre>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
 <a name="Operazioni"></a>
@@ -146,26 +151,6 @@
   di base come la lettura/scrittura su database o su file. Il codice contiene solo la
   logica essenziale per il compito da eseguire. Di seguito è mostrato un esempio:
 </p>
-<pre><code class="language-c">// Operation example
-char* join(apr_pool_t *mp, apr_array_header_t *ar) {
-  char *result = NULL, *s;
-  if (ar->nelts > 0) {
-    s = APR_ARRAY_IDX(ar, 0, char*);
-    if (s) {
-      result = apr_pstrdup(mp, s);
-    }
-  }
-  if (ar->nelts > 1) {
-    for (int i = 1; i < ar->nelts; i ++) {
-      s = APR_ARRAY_IDX(ar, i, char*);
-      if (s) {
-        result = apr_pstrcat(mp, ",", s, NULL);
-      }
-    }
-  }
-  return result;
-}
-</code></pre>
 <p>
   Come si vede è esclusa qualsiasi attività non riconducibile alla specifica operazione
   da eseguire, compresa la validazione dell'input e il controllo dell'errore.

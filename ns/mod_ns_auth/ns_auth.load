@@ -1,0 +1,1 @@
+LoadModule ns_auth_module /usr/lib/apache2/modules/mod_ns_auth.so
