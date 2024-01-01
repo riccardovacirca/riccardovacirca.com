@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="Riccardo Vacirca">
-  <title>Riccardo Vacirca - APRX - APR eXtension</title>
+  <title>Riccardo Vacirca - APR - Apache Portable Runtime</title>
   <!-- -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -72,102 +72,146 @@
 <body><main><div id="main" class="container">
 <!-- ----------------------------------------------------------------------- -->
 <h1 class="display-5 font-anton logo mb-5">
-  APRX - APR eXtension
+  APR - Apache Portable Runtime
   <div class="lang">italiano</div>
 </h1>
 <!-- ----------------------------------------------------------------------- -->
-<a name="aprx_index"></a>
+<a name="apr_index"></a>
 <h4 class="display-5 logo">Indice</h4>
 <div class="contents">
   <ul class="no-bullet">
-    <li><a name="aprx_random" href="#aprx_random">aprx_random</a></li>
-    <!-- li><a name="aprx_is_empty" href="#aprx_is_empty">aprx_is_empty</a></li -->
+    <li><a href="#apr_application_skeleton">Skeleton di una applicazione APR</a></li>
+    <li><a href="#apr_application_logic">Funzione della logica applicativa</a></li>
+    <li><a href="#apr_application_helper">Funzione helper</a></li>
   </ul>
 </div>
 <!-- ----------------------------------------------------------------------- -->
-<a name="Top"></a>
+
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
-<a name="aprx_random"></a>
+<a name="Top"></a><a name="apr_application_skeleton"></a>
 <div class="header">
   <p>
-    Next: <a href="#aprx_is_empty" accesskey="n" rel="next">aprx_is_empty</a>,
-    Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>,
-    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    Next: <a href="#apr_application_logic" accesskey="n" rel="next">Funzione della logica applicativa</a>,
+    Previous: -,
+    Up: - &nbsp;
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">aprx_random</h4>
-<pre><code class="language-c">//! Genera un numero intero nel range specificato.
-//! \param l (int) Minimo nel range
-//! \param l (int) Massimo nel range
-//! \return (int) Numero intero nel range specificato
-</code></pre>
-<pre><code class="language-c">int aprx_random(int l, int h) {
-  srand(time(NULL));
-  return l < h ? (rand() % (h - l + 1)) + l : 0;
-}
-</code></pre>
-<h5>Esempio</h5>
-<pre><code class="language-c">#include "stdio.h"
-#include "stdlib.h"
-int rv = aprx_random(10, 100);
-printf("%d\n", rv);
-</code></pre>
-<!-- ----------------------------------------------------------------------- ---
-<hr class="mt-5">
-<a name="aprx_is_empty"></a>
-<div class="header">
-  <p>
-    Next: <a href="#" accesskey="n" rel="next"></a>,
-    Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
-    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
-    [<a href="/" title="Home" rel="index">Home</a>]
-  </p>
-</div>
-<h4 class="chapter mb-3">aprx_is_empty</h4>
-<pre><code class="language-c">int aprx_is_empty(const char *s) {
-  int rv = 1;
-  if (s && (*s != '\0')) {
-    apr_size_t l = strlen(s);
-    for (apr_size_t i = 0; i < l; i ++) {
-      // La stringa non è vuota se contiene almeno un carattere non vuoto
-      if (!apr_isspace(s[i])) {
-        rv = 0;
-        break;
-      }
+<h4 class="chapter mb-3">Skeleton di una applicazione APR</h4>
+<pre><code class="language-c">#include "apr.h"
+#include "apr_pools.h"
+#include "stdio.h"
+
+int main(int argc, char **argv) {
+
+  int res = 0;
+
+  struct state_t {
+    int init, pool;
+  } state = {0, 0}
+
+  do {
+
+    apr_status_t rv;
+    
+    rv = apr_initialize();
+    state.init = rv == APR_SUCCESS;
+    if (!state.init)
+      break;
+    
+    apr_pool_t *mp;
+    rv = apr_pool_create(&mp, NULL);
+    state.pool = rv == APR_SUCCESS;
+    if (!state.pool)
+      break;
+
+    res = 1;
+  
+    apr_pool_destroy(mp);
+    apr_terminate();
+  
+  } while (0);
+
+  if (!res) {
+    if (!state.init) {
+      printf("APR initialization error\n");
+    } else if (!state.pool) {
+      printf("APR memory error\n");
     }
   }
-  return rv;
+
+  exit(res ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 </code></pre>
-<!-- ----------------------------------------------------------------------- ---
+<!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
-<a name="aprx_is_empty"></a>
+<a name="apr_application_logic"></a>
 <div class="header">
   <p>
-    Next: <a href="#" accesskey="n" rel="next"></a>,
-    Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
+    Next: <a href="#apr_application_helper" accesskey="n" rel="next">Funzione helper</a>,
+    Previous: <a href="#apr_application_skeleton" accesskey="p" rel="prev">Skeleton di una applicazione APR</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">aprx_is_int</h4>
-<pre><code class="language-c">
-int aprx_is_int(const char *s) {
-  int rv = 0;
-  if (s && (*s != '\0')) {
-    // Puntatore alla fine della stringa
-    char *endp;
-    // Converto la stringa in intero (in base 10)
-    (void)strtol(s, &endp, 10);
-    // Verifico se il puntatore di fine stringa è valido
-    rv = (endp != s) && (*endp == '\0');
+<h4 class="chapter mb-3">Funzione della logica applicativa</h4>
+<pre><code class="language-c">#include "apr.h"
+#include "apr_pools.h"
+#include "stdio.h"
+
+int example_logic(apr_pool_t *mp) {
+
+  int res = 0;
+
+  struct state_t {
+    int input;
+  } state = {0}
+
+  do {
+
+    state.input = mp != NULL;
+    if (!state.input)
+      break;
+
+    printf("Hello, World!\n");
+      
+    res = 1;
+    
+  } while (0);
+
+  if (!res) {
+    if (!state.input) {
+      printf("Input error\n");
+    }
   }
-  return rv;
+
+  return res;
+}
+</code></pre>
+<!-- ----------------------------------------------------------------------- -->
+<hr class="mt-5">
+<a name="apr_application_helper"></a>
+<div class="header">
+  <p>
+    Next: <a href="#-" accesskey="n" rel="next">-</a>,
+    Previous: <a href="#apr_application_logic" accesskey="p" rel="prev">Funzione della logica applicativa</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
+</div>
+<h4 class="chapter mb-3">Funzione helper</h4>
+<pre><code class="language-c">#include "apr.h"
+#include "apr_pools.h"
+#include "apr_strings.h"
+#include "stdio.h"
+
+void example_helper(apr_pool_t *mp) {
+  const char *msg = apr_psprintf(mp, "%s", "Hello, World!");
+  printf("%s\n");
 }
 </code></pre>
 <!-- ----------------------------------------------------------------------- ---
@@ -178,7 +222,7 @@ int aprx_is_int(const char *s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -205,7 +249,7 @@ int aprx_is_double(const char *s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -229,7 +273,7 @@ int aprx_in_string(const char *s, const char *sub) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -268,7 +312,7 @@ char* aprx_pbuffer(apr_pool_t *mp, const char *s, apr_size_t *bf_size) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -289,7 +333,7 @@ char* aprx_pstring(apr_pool_t *mp, const char *s, apr_size_t sz) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -325,7 +369,7 @@ const char* aprx_ptrim(apr_pool_t *mp, const char *s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -362,7 +406,7 @@ const char* aprx_pstrip_char(apr_pool_t *mp, const char *s, char c) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -394,7 +438,7 @@ char* aprx_pslice(apr_pool_t *mp, const char *s, apr_size_t i, apr_size_t l) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -446,7 +490,7 @@ const char* aprx_pstrrep(apr_pool_t *mp, const char *s, const char *f, const cha
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -477,7 +521,7 @@ const char* aprx_preplace_char(apr_pool_t *mp, const char *s, char f, char r) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -502,7 +546,7 @@ char* aprx_strempty(apr_pool_t *mp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -565,7 +609,7 @@ apr_array_header_t* aprx_psplit(apr_pool_t *mp, const char *s, const char *sp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -617,7 +661,7 @@ char* aprx_pjoin(apr_pool_t *mp, apr_array_header_t *a, const char *sp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -653,7 +697,7 @@ char* aprx_pmd5(apr_pool_t *mp, const char *s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -682,7 +726,7 @@ char* aprx_pbase64encode(apr_pool_t *mp, const char *s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -717,7 +761,7 @@ char* aprx_pbase64decode(apr_pool_t* mp, const char* s) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -752,7 +796,7 @@ apr_table_t* aprx_pargs2table(apr_pool_t *mp, const char *q) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -770,7 +814,7 @@ int aprx_table_nelts(apr_table_t *t) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -794,7 +838,7 @@ apr_table_entry_t* aprx_table_elt(apr_table_t *t, int i) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -825,7 +869,7 @@ const char *aprx_datetime_fmt(apr_pool_t *mp, const char *f, int loc) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -858,7 +902,7 @@ char* aprx_pdatetime(apr_pool_t *mp, apr_time_t t, const char *f) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -891,7 +935,7 @@ char* aprx_pdatetime_local(apr_pool_t *mp, apr_time_t t, const char *f) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -928,7 +972,7 @@ char* aprx_pdatetime_utc(apr_pool_t *mp, apr_time_t t, const char *f) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -955,7 +999,7 @@ int aprx_isfile(const char *f, apr_pool_t *mp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -977,7 +1021,7 @@ apr_status_t aprx_pfopen(apr_file_t **fd, const char *f, apr_int32_t fl, apr_poo
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -995,7 +1039,7 @@ apr_status_t aprx_pfopen_read(apr_file_t **fd, const char *f, apr_pool_t *mp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1013,7 +1057,7 @@ apr_status_t aprx_pfopen_append(apr_file_t **fd, const char *f, apr_pool_t *mp) 
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1031,7 +1075,7 @@ apr_status_t aprx_pfopen_truncate(apr_file_t **fd, const char *f, apr_pool_t *mp
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1056,7 +1100,7 @@ apr_size_t aprx_fwrite(apr_file_t *fd, const char *buf, apr_size_t l) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1094,7 +1138,7 @@ apr_size_t aprx_pfread(apr_pool_t *mp, apr_file_t *fd, void **buf) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1112,7 +1156,7 @@ apr_status_t aprx_fclose(apr_file_t *fd) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1131,7 +1175,7 @@ char* aprx_env(const char *e, apr_pool_t *mp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
@@ -1170,7 +1214,7 @@ char* aprx_ppipein(apr_pool_t *mp) {
     Next: <a href="#" accesskey="n" rel="next"></a>,
     Previous: <a href="#aprx_random" accesskey="p" rel="prev">aprx_random</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
-    [<a href="#aprx_index" title="Indice" rel="contents">Contents</a>]
+    [<a href="#apr_index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
