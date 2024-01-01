@@ -106,43 +106,50 @@
 
 int main(int argc, char **argv) {
 
-  int res = 0;
+  int res = 1;
+  apr_status_t rv;
+  apr_pool_t *mp;
 
   struct state_t {
     int init, pool;
-  } state = {0, 0}
+  } st = {0, 0}
 
   do {
-
-    apr_status_t rv;
     
     rv = apr_initialize();
-    state.init = rv == APR_SUCCESS;
-    if (!state.init)
+    st.init = rv == APR_SUCCESS;
+    if (!st.init) {
       break;
+    }
     
-    apr_pool_t *mp;
     rv = apr_pool_create(&mp, NULL);
-    state.pool = rv == APR_SUCCESS;
-    if (!state.pool)
+    st.pool = rv == APR_SUCCESS;
+    if (!st.pool) {
       break;
+    }
 
-    res = 1;
-  
-    apr_pool_destroy(mp);
-    apr_terminate();
-  
+    res = 0;
+
   } while (0);
 
-  if (!res) {
-    if (!state.init) {
+  if (res) {
+    if (!st.init) {
       printf("APR initialization error\n");
-    } else if (!state.pool) {
+    } else if (!st.pool) {
       printf("APR memory error\n");
+    } else {
+      printf("General error\n");
     }
   }
 
-  exit(res ? EXIT_FAILURE : EXIT_SUCCESS);
+  if (st.init) {
+    if (st.pool) {
+      apr_pool_destroy(mp);
+    }
+    apr_terminate();
+  }
+
+  return res;
 }
 </code></pre>
 <!-- ----------------------------------------------------------------------- -->
@@ -168,13 +175,14 @@ int example_logic(apr_pool_t *mp) {
 
   struct state_t {
     int input;
-  } state = {0}
+  } st = {0}
 
   do {
 
-    state.input = mp != NULL;
-    if (!state.input)
+    st.input = mp != NULL;
+    if (!st.input) {
       break;
+    }
 
     printf("Hello, World!\n");
       
@@ -183,8 +191,10 @@ int example_logic(apr_pool_t *mp) {
   } while (0);
 
   if (!res) {
-    if (!state.input) {
+    if (!st.input) {
       printf("Input error\n");
+    } else {
+      printf("General error\n");
     }
   }
 
