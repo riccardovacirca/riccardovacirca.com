@@ -70,7 +70,7 @@
   }
   </style>
 </head>
-<body><main><div id="main" class="container">
+<body><a name="Top"></a><main><div id="main" class="container">
 <!-- ----------------------------------------------------------------------- -->
 <h1 class="display-5 font-anton logo mb-5">
   linux daemon
@@ -82,26 +82,25 @@
 <h4 class="display-5 logo">Indice</h4>
 <div class="contents">
   <ul class="no-bullet">
-    <li><a href="#introduzione">Introduzione</a></li>
-    <li><a href="#skeleton">Skeleton</a></li>
-    <li><a href="#data_structures">Data structures</a></li>
-    <li><a href="#main_function">Main function</a></li>
-    <li><a href="#daemon_context">Daemon context</a></li>
-    <li><a href="#request_handler">Request handler</a></li>
-    <li><a href="#signal_handler">Signal handler</a></li>
+    <li><a href="#intro">Introduzione</a></li>
+    <li><a href="#skeleton">Skeleton dell'applicazione</a></li>
+    <li><a href="#interface_data_structure">Interfaccia e strutture dati</a></li>
+    <li><a href="#main_function">Funzione main</a></li>
+    <li><a href="#application_logic">Logica applicativa</a></li>
+    <li><a href="#helper">Funzioni helper</a></li>
     <li><a href="#makefile">Makefile</a></li>
-    <li><a href="#installation">Installation</a></li>
+    <li><a href="#installation">Installazione</a></li>
     <li><a href="#copyright">Copyright</a></li>
   </ul>
 </div>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
-<a name="Top"></a><a name="introduzione"></a>
+<a name="intro"></a>
 <div class="header">
   <p>
-    Next: <a href="#skeleton" accesskey="n" rel="next">Skeleton</a>,
+    Next: <a href="#skeleton" accesskey="n" rel="next">Skeleton dell'applicazione</a>,
     Previous: -,
-    Up: - &nbsp;
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
@@ -113,14 +112,31 @@
 <a name="skeleton"></a>
 <div class="header">
   <p>
-    Next: <a href="#main_function" accesskey="n" rel="next">Main function</a>,
-    Previous: <a href="#introduzione" accesskey="n" rel="next">Introduzione</a>,
+    Next: <a href="#interface_data_structure" accesskey="n" rel="next">Interfaccia e strutture dati</a>,
+    Previous: <a href="#intro" accesskey="n" rel="next">Introduzione</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Skeleton</h4>
+<h4 class="chapter mb-3">Skeleton dell'applicazione</h4>
+<p></p>
+<pre><code class="language-c">// Copyright (C)2023-2024 - Riccardo Vacirca
+    
+</code></pre>
+<!-- ----------------------------------------------------------------------- -->
+<hr class="mt-5">
+<a name="interface_data_structure"></a>
+<div class="header">
+  <p>
+    Next: <a href="#main_function" accesskey="n" rel="next">Funzione main</a>,
+    Previous: <a href="#skeleton" accesskey="n" rel="next">Skeleton dell'applicazione</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#index" title="Indice" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
+</div>
+<h4 class="chapter mb-3">Interfaccia e strutture dati</h4>
 <p></p>
 <pre><code class="language-c">// Copyright (C)2023-2024 - Riccardo Vacirca
     
@@ -130,82 +146,134 @@
 <a name="main_function"></a>
 <div class="header">
   <p>
-    Next: <a href="#logic" accesskey="n" rel="next">Application logic functions</a>,
-    Previous: <a href="#skeleton" accesskey="n" rel="prev">Skeleton</a>,
+    Next: <a href="#logic" accesskey="n" rel="next">Logica applicativa</a>,
+    Previous: <a href="#interface_data_structure" accesskey="n" rel="prev">Interfaccia e strutture dati</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Main function</h4>
+<h4 class="chapter mb-3">Funzione main</h4>
 <p></p>
 <pre><code class="language-c">// Copyright (C)2023-2024 - Riccardo Vacirca
 
-#include "apr.h"
-#include "apr_pools.h"
-#include "stdio.h"
-
 int main(int argc, char **argv) {
 
+  // Inizializzazione del valore di ritorno
+
   int res = 1;
-  apr_status_t rv;
+
+  // Inizializzazione delle variabili globali
+
   apr_pool_t *mp;
+  apr_status_t rv;
+  char *err = NULL;
+  struct sigaction sa;
+  context_t *ctx;
+  struct mg_mgr mgr;
+
+  // Inizializzazione dello stato
 
   struct state_t {
-    int init, pool;
-  } st = {0, 0}
+    int init, pool, context;
+  } st = {0, 0, 0};
+
+  // Logica applicativa
 
   do {
-    
+
+    sighd(&sa, sighd_fn);
+
     rv = apr_initialize();
     st.init = rv == APR_SUCCESS;
     if (!st.init) {
       break;
     }
-    
+
     rv = apr_pool_create(&mp, NULL);
     st.pool = rv == APR_SUCCESS;
     if (!st.pool) {
       break;
     }
 
+    ctx = context_alloc(mp);
+    st.context = ctx != NULL;
+    if (!st.context) {
+      break;
+    }
+
+    st.context = context_init(mp, &ctx, argc, argv, &err);
+    if (!st.context) {
+      break;
+    }
+
+    if (ctx->dbd_driver != NULL) {
+      if (ctx->dbd_conn_s != NULL) {
+        apr_dbd_init(mp);
+      }
+    }
+
+    daemonize();
+
+    mg_mgr_init(&mgr);
+    mg_http_listen(&mgr, ctx->addr, cb, (void*)ctx);
+    while (server_run) {
+      mg_mgr_poll(&mgr, 1000);
+    }
+    sleep(2);
+    mg_mgr_free(&mgr);
+    
+    context_destroy(ctx);
+    
     res = 0;
 
   } while (0);
+
+  // Gestione degli errori
 
   if (res) {
     if (!st.init) {
       printf("APR initialization error\n");
     } else if (!st.pool) {
       printf("APR memory error\n");
+    } else if (!st.context) {
+      if (err != NULL) {
+        printf("%s.\n", err);
+      } else {
+        printf("Daemon context error\n");
+      }
     } else {
-      printf("General error\n");
+      printf("Daemon general error\n");
     }
+  }
+
+  // Rilascio delle risorse allocate
+
+  if (st.pool) {
+    apr_pool_destroy(mp);
   }
 
   if (st.init) {
-    if (st.pool) {
-      apr_pool_destroy(mp);
-    }
     apr_terminate();
   }
 
+  // Valore di ritorno
+  
   return res;
-}
-</code></pre>
+}</code></pre>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
 <a name="logic"></a>
 <div class="header">
   <p>
-    Next: <a href="#helper" accesskey="n" rel="next">Helper functions</a>,
-    Previous: <a href="#main_function" accesskey="p" rel="prev">Main function</a>,
+    Next: <a href="#helper" accesskey="n" rel="next">Funzioni helper</a>,
+    Previous: <a href="#main_function" accesskey="p" rel="prev">Funzione main</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Application logic functions</h4>
+<h4 class="chapter mb-3">Logica applicativa</h4>
 <pre><code class="language-c">// Copyright (C)2023-2024 - Riccardo Vacirca
 
 #include "apr.h"
@@ -250,13 +318,13 @@ int example_logic(apr_pool_t *mp) {
 <div class="header">
   <p>
     Next: <a href="#makefile" accesskey="n" rel="next">Makefile</a>,
-    Previous: <a href="#logic" accesskey="p" rel="prev">Application logic functions</a>,
+    Previous: <a href="#logic" accesskey="p" rel="prev">Logica applicativa</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
   </p>
 </div>
-<h4 class="chapter mb-3">Helper functions</h4>
+<h4 class="chapter mb-3">Funzioni helper</h4>
 <p></p>
 <pre><code class="language-c">// Copyright (C)2023-2024 - Riccardo Vacirca
 
@@ -275,8 +343,8 @@ void example_helper(apr_pool_t *mp) {
 <a name="makefile"></a>
 <div class="header">
   <p>
-    Next: <a href="#copyright" accesskey="n" rel="next">Copyright</a>,
-    Previous: <a href="#helper" accesskey="p" rel="prev">Helper functions</a>,
+    Next: <a href="#installation" accesskey="n" rel="next">Installazione</a>,
+    Previous: <a href="#helper" accesskey="p" rel="prev">Funzioni helper</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
@@ -290,11 +358,29 @@ all:
 </code></pre>
 <!-- ----------------------------------------------------------------------- -->
 <hr class="mt-5">
+<a name="installation"></a>
+<div class="header">
+  <p>
+    Next: <a href="#copyright" accesskey="n" rel="next">Copyright</a>,
+    Previous: <a href="#makefile" accesskey="p" rel="prev">Makefile</a>,
+    Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
+    [<a href="#index" title="Indice" rel="contents">Contents</a>]
+    [<a href="/" title="Home" rel="index">Home</a>]
+  </p>
+</div>
+<h4 class="chapter mb-3">Installazione</h4>
+<pre><code class="language-makefile"># Copyright (C)2023-2024 - Riccardo Vacirca
+CC=gcc
+all:
+  $(CC)
+</code></pre>
+<!-- ----------------------------------------------------------------------- -->
+<hr class="mt-5">
 <a name="copyright"></a>
 <div class="header">
   <p>
     Next: -,
-    Previous: <a href="#makefile" accesskey="p" rel="prev">Makefile</a>,
+    Previous: <a href="#installation" accesskey="p" rel="prev">Installazione</a>,
     Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp;
     [<a href="#index" title="Indice" rel="contents">Contents</a>]
     [<a href="/" title="Home" rel="index">Home</a>]
