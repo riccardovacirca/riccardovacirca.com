@@ -8,6 +8,7 @@
     body {
       margin: 0;
       padding: 0;
+      font-size: 14px;
     }
     .container {
       display: flex;
@@ -20,6 +21,7 @@
     }
     .frame.left {
       width: 200px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -28,8 +30,8 @@
     <div class="frame left">
       <!-- menu -->
       <ul>
-        <li><a href="#" onclick="loadCode('main.c')">main.c</a></li>
-        <li><a href="#" onclick="loadCode('Makefile')">Makefile</a></li>
+        <li><a href="#" onclick="loadCode('main.c','c')">main.c</a></li>
+        <li><a href="#" onclick="loadCode('Makefile','makefile')">Makefile</a></li>
       </ul>
     </div>
     <!-- contents -->
@@ -39,14 +41,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-c.min.js"></script>
   <script>
-    window.onload = function () {loadCode('main.c');};
-    function loadCode(filename) {
+    window.onload = function () {loadCode('main.c','c');};
+    function loadCode(filename,lang) {
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             var codeFrame = document.getElementById('codeFrame');
-            codeFrame.innerHTML = '<pre><code class="language-c">' + xhr.responseText + '</code></pre>';
+            codeFrame.innerHTML = '<pre><code class="language-'+lang+'">' + xhr.responseText + '</code></pre>';
             Prism.highlightAll();
           } else {
             console.error('Errore durante il caricamento del file');
