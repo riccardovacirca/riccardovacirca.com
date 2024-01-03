@@ -7,7 +7,7 @@ LD_FLAGS=-lapr-1 -laprutil-1
 all: daemon invoice
 
 daemon:
-	$(CC) $(CFLAGS) -o daemon mongoose.c daemon.c $(INCLUDES) $(LD_FLAGS)
+	$(CC) $(CFLAGS) -o daemon mongoose.c main.c $(INCLUDES) $(LD_FLAGS)
 
 invoice:
 	$(CC) $(CFLAGS) -o invoice invoice.c $(INCLUDES) $(LD_FLAGS) -lhpdf
