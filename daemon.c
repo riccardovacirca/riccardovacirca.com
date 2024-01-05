@@ -81,7 +81,7 @@ void context_destroy(context_t *ctx) {
   }
 }
 
-void sighd_fn(int signum) {
+void signal_cb(int signum) {
   if (signum == SIGTERM || signum == SIGINT) {
     server_run = 0;
   }
@@ -89,8 +89,8 @@ void sighd_fn(int signum) {
 
 typedef void(*sighd_t)(int s);
 
-void sighd(struct sigaction *sa, sighd_t sighd_fn) {
-  sa->sa_handler = sighd_fn;
+void signal_handler(struct sigaction *sa, sighd_t signal_cb) {
+  sa->sa_handler = signal_cb;
   sigemptyset(&sa->sa_mask);
   sa->sa_flags = 0;
   sigaction(SIGTERM, sa, NULL);
@@ -129,7 +129,7 @@ void daemonize() {
   close(STDERR_FILENO);
 }
 
-void cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
+void request_handler(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
 
   int err = 0;
   apr_pool_t *mp;
@@ -368,7 +368,7 @@ int main(int argc, char **argv) {
 
   do {
 
-    sighd(&sa, sighd_fn);
+    signal_handler(&sa, signal_cb);
 
     rv = apr_initialize();
     st.init = rv == APR_SUCCESS;
@@ -402,7 +402,7 @@ int main(int argc, char **argv) {
     //daemonize();
 
     mg_mgr_init(&mgr);
-    mg_http_listen(&mgr, ctx->addr, cb, (void*)ctx);
+    mg_http_listen(&mgr, ctx->addr, request_handler, (void*)ctx);
     while (server_run) {
       mg_mgr_poll(&mgr, 1000);
     }
@@ -435,10 +435,10 @@ int main(int argc, char **argv) {
 
   // Rilascio delle risorse allocate
 
-  if (st.pool) {
-    apr_pool_destroy(mp);
-  }
   if (st.init) {
+    if (st.pool) {
+      apr_pool_destroy(mp);
+    }
     apr_terminate();
   }
 
