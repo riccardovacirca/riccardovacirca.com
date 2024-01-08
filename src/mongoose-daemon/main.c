@@ -1,25 +1,3 @@
-
-/* Copyright (c) 2024 Riccardo Vacirca
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
-*/
-
 #include "apr.h"
 #include "apr_general.h"
 #include "apr_pools.h"
@@ -106,7 +84,7 @@ typedef struct context_t {
 volatile sig_atomic_t server_run = 1;
 
 
-apr_status_t aprx_pfopen(apr_file_t **fd, const char *f, apr_int32_t fl, apr_pool_t *mp) {
+apr_status_t file_open(apr_file_t **fd, const char *f, apr_int32_t fl, apr_pool_t *mp) {
   apr_status_t rv = APR_EGENERAL;
   if (mp && f) {
     rv = apr_file_open(fd, f, fl, APR_OS_DEFAULT, mp);
@@ -114,19 +92,19 @@ apr_status_t aprx_pfopen(apr_file_t **fd, const char *f, apr_int32_t fl, apr_poo
   return rv;
 }
 
-apr_status_t aprx_pfopen_read(apr_file_t **fd, const char *f, apr_pool_t *mp) {
-  return aprx_pfopen(fd, f, APR_READ, mp);
+apr_status_t file_open_read(apr_file_t **fd, const char *f, apr_pool_t *mp) {
+  return file_open(fd, f, APR_READ, mp);
 }
 
-apr_status_t aprx_pfopen_append(apr_file_t **fd, const char *f, apr_pool_t *mp) {
-  return aprx_pfopen(fd, f, APR_WRITE | APR_CREATE | APR_APPEND, mp);
+apr_status_t file_open_append(apr_file_t **fd, const char *f, apr_pool_t *mp) {
+  return file_open(fd, f, APR_WRITE | APR_CREATE | APR_APPEND, mp);
 }
 
-apr_status_t aprx_pfopen_truncate(apr_file_t **fd, const char *f, apr_pool_t *mp) {
-  return aprx_pfopen(fd, f, APR_WRITE | APR_CREATE | APR_TRUNCATE, mp);
+apr_status_t file_open_truncate(apr_file_t **fd, const char *f, apr_pool_t *mp) {
+  return file_open(fd, f, APR_WRITE | APR_CREATE | APR_TRUNCATE, mp);
 }
 
-apr_size_t aprx_fwrite(apr_file_t *fd, const char *buf, apr_size_t l) {
+apr_size_t file_write(apr_file_t *fd, const char *buf, apr_size_t l) {
   apr_size_t rv = 0;
   if (fd && buf && (l > 0)) {
     apr_status_t st = apr_file_write_full(fd, buf, l, &rv);
@@ -137,7 +115,7 @@ apr_size_t aprx_fwrite(apr_file_t *fd, const char *buf, apr_size_t l) {
   return rv;
 }
 
-apr_size_t aprx_pfread(apr_pool_t *mp, apr_file_t *fd, void **buf) {
+apr_size_t file_read(apr_pool_t *mp, apr_file_t *fd, void **buf) {
   apr_size_t rv = 0;
   if (mp && fd && buf) {
     apr_finfo_t finfo;
@@ -161,14 +139,14 @@ apr_size_t aprx_pfread(apr_pool_t *mp, apr_file_t *fd, void **buf) {
   return rv;
 }
 
-apr_status_t aprx_fclose(apr_file_t *fd) {
+apr_status_t file_close(apr_file_t *fd) {
   return apr_file_close(fd);
 }
 
 
 #define ERROR_TIMESTAMP -1
 
-apr_time_t aprx_timestamp(int year, int month, int day, int hour, int minute, int second) {
+apr_time_t timestamp(int year, int month, int day, int hour, int minute, int second) {
   if (year == 0 && month == 0 && day == 0 && hour == 0 && minute == 0 && second == 0) {
     return apr_time_now();
   }
@@ -191,17 +169,9 @@ apr_time_t aprx_timestamp(int year, int month, int day, int hour, int minute, in
   return unixTime;
 }
 
-apr_time_t aprx_now() {
-  return aprx_timestamp(0, 0, 0, 0, 0, 0);
+apr_time_t now() {
+  return timestamp(0, 0, 0, 0, 0, 0);
 }
-
-
-
-
-
-
-
-
 
 void log_rotate(logger_t *l) {
   apr_finfo_t finfo;
@@ -218,7 +188,7 @@ void log_rotate(logger_t *l) {
   }
   // Genero un nome di file per il file di log originale
   // con il timestamp unix corrente per non sovrascrivere file precedenti
-  apr_time_t ts = aprx_now(); //aprx_timestamp(l->pool, NULL, NULL);
+  apr_time_t ts = now(); //timestamp(l->pool, NULL, NULL);
   if (ts <= 0) {
     return;
   }
@@ -240,7 +210,7 @@ void log_rotate(logger_t *l) {
   // Apro un nuovo file con il nome l->fname
   // fh_new e l->fh non puntano allo stesso file
   apr_file_t *fh_new;
-  rv = aprx_pfopen_truncate(&fh_new, l->fname, l->pool);
+  rv = file_open_truncate(&fh_new, l->fname, l->pool);
   if (rv != APR_SUCCESS) {
     // Provo a ripristinare il nome del file di ol originale
     apr_file_rename(fname_old, l->fname, l->pool);
@@ -266,14 +236,14 @@ void log_rotate(logger_t *l) {
   apr_file_close(fh_new);
 }
 
-logger_t* log_init(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz) {
+logger_t* log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz) {
   logger_t *ret = (logger_t*)apr_palloc(mp, sizeof(logger_t));
   if (ret != NULL) {
     ret->pool = mp;
     ret->fname = f;
     ret->mutex = m;
     ret->max_size = sz ? sz : APRX_LOG_MAX_FILE_SIZE;
-    apr_status_t st = aprx_pfopen_append(&(ret->fh), f, mp);
+    apr_status_t st = file_open_append(&(ret->fh), f, mp);
     if (st != APR_SUCCESS) {
       return NULL;
     }
@@ -282,7 +252,7 @@ logger_t* log_init(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_siz
   return ret;
 }
 
-void log_close(logger_t *l) {
+void log_destroy(logger_t *l) {
   if (l != NULL) {
     if (l->fh != NULL) {
       apr_file_close(l->fh);
@@ -602,14 +572,24 @@ apr_status_t context_init(apr_pool_t *mp, context_t **ctx, int argc, char *argv[
 {
   struct state_t {
     struct flag_t {
-      int input, args, addr, mutex, logger;
+      int input;
+      int args;
+      int addr;
+      int mutex;
+      int logger;
     } flag;
-    int error, result;
+    int error;
+    int result;
     apr_status_t mutex;
     apr_thread_mutex_t *log_mutex;
   } st = {
-    .flag.input = 0, .flag.args = 0, .flag.addr = 0, .flag.mutex = 0,
-    .flag.logger = 0, .error = 0, .result = 0
+    .flag.input = 0,
+    .flag.args = 0,
+    .flag.addr = 0,
+    .flag.mutex = 0,
+    .flag.logger = 0,
+    .error = 0,
+    .result = 0
   };
 
   do {
@@ -644,7 +624,7 @@ apr_status_t context_init(apr_pool_t *mp, context_t **ctx, int argc, char *argv[
     }
     
     // Inizializzo il logger
-    (*ctx)->logger = log_init(mp, st.log_mutex, (*ctx)->log_file, 0);
+    (*ctx)->logger = log_alloc(mp, st.log_mutex, (*ctx)->log_file, 0);
     st.flag.logger = (*ctx)->logger != NULL;
     if (st.error = !st.flag.logger) {
       break;
@@ -739,17 +719,22 @@ int main(int argc, char **argv)
     //daemonize();
 
     mg_mgr_init(&(st.mgr));
+    
     // Registro il request handler del servizio
     mg_http_listen(&(st.mgr), (st.context)->addr, req_hd, (void*)(st.context));
+    
     // Eseguo il main loop del servizio
     while (server_run) {
       mg_mgr_poll(&(st.mgr), 1000);
     }
+    
     sleep(2);
+    
     mg_mgr_free(&(st.mgr));
     
     // Rilascio lo stato globale del servizio
     context_destroy(st.context);
+  
   } while (0);
 
   if (st.error) {
