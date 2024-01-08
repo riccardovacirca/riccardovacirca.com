@@ -4,22 +4,19 @@ Linux daemon HTTP basato su Mongoose embedded server
 
 Introduzione
 ------------
-In un sistema operativo Unix o Unix-like, un daemon è un tipo di processo in esecuzione in ba-
-ckground, progettato per eseguire specifiche funzioni o fornire servizi senza richiedere l'in-
-terazione diretta con l'utente. I daemon, possono gestire servizi critici come connessioni di
-rete, servizi web, processi di sistema, servizi di stampa, pianificazione delle attività, ecc.
-Solitamente vengono avviati durante l'avvio del sistema e possono essere gestiti tramite stru-
-menti di gestione dei servizi. Le utility come systemd controllano e coordinano i servizi del
-sistema, inclusi i daemon, semplificandone la gestione. I sistemi con systemd, utilizzano tra
-gli altri, systemctl per avviare, fermare, riavviare o gestire i servizi. Ulteriori strumenti
-come service o init.d permettono il controllo dei servizi su sistemi legacy.
+Questa applicazione, sviluppata in linguaggio C è progettata come daemon per
+sistemi Linux. Il servizio, utilizza Mongoose HTTP embedded server per fornire
+un'interfaccia HTTP per l'accesso all'API.
 
-Questa applicazione, sviluppata in linguaggio C è progettata come daemon per sistemi Linux. Il
-servizio, utilizza Mongoose HTTP embedded server per fornire un'interfaccia HTTP per l'accesso
-alla API.
+In un sistema Unix-like, un daemon è un tipo di processo in esecuzione in
+background progettato per eseguire specifiche funzioni o fornire servizi senza
+richiedere l'interazione diretta con l'utente. I daemon, possono gestire servizi
+critici come connessioni di rete, servizi web, processi di sistema, servizi di
+stampa, pianificazione delle attività, ecc.
+Solitamente vengono avviati durante l'avvio del sistema e possono essere gestiti
+tramite altri servizi come systemd, che hanno lo scopo di controllare e
+coordinare i daemon, semplificandone la gestione. I sistemi con systemd
+utilizzano ad esempio systemctl per avviare, fermare, riavviare o gestire i
+daemon. Ulteriori strumenti come service o init.d permettono il controllo dei
+servizi sui sistemi legacy.
 
-Mongoose Embedded HTTP Server
------------------------------
-Mongoose Embedded Server, è una libreria leggera e altamente efficiente che fornisce un server
-HTTP embedded, ideale per applicazioni embedded e servizi basati su web dal momento che permet-
-te di creare rapidamente un'interfaccia web senza dover utilizzare server web complessi.
