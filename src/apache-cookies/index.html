@@ -182,8 +182,16 @@
               '<a href="#vhost.conf">vhost.conf</a> | ' +
               '<a href="#Makefile">Makefile</a> | ' +
               '<a href="#LICENSE">LICENSE</a>' +
-              '</div>' +
-              '<pre><code class="language-' + lang + ' line-numbers">' + xhr.responseText.replace(/</g, "&lt;") + '</code></pre>';
+              '</div>';
+            if (xhr.responseText.trim() === "") {
+              main.innerHTML += '<pre><code class="language-' + lang + ' line-numbers">' +
+                'Nessuna informazione disponibile' + 
+                '</code></pre>';
+            } else {
+              main.innerHTML += '<pre><code class="language-' + lang + ' line-numbers">' +
+                xhr.responseText.replace(/</g, "&lt;") + 
+                '</code></pre>';
+            }
             Prism.highlightAll();
           } else {
             console.error('Errore durante il caricamento del file');
