@@ -21,7 +21,13 @@
     }
     .container {
       height: 100vh;
-      width: 700px;
+      width: 760px;
+    }
+    .md {
+      margin: 0;
+      padding: 0;
+      background-color:#f9f9f9;
+      color: #444444;
     }
   </style>
   <style>
@@ -64,13 +70,10 @@
 </head>
 <body>
   <div class="container">
-    <div id="README"></div>
+    <div id="README.md"></div>
     <div id="main.c"></div>
-    <div id="module.conf"></div>
-    <div id="module.load"></div>
-    <div id="vhost.conf"></div>
     <div id="Makefile"></div>
-    <div id="LICENSE"></div>
+    <div id="LICENSE.md"></div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-c.min.js"></script>
@@ -168,10 +171,10 @@
   </script>
   <script>
     window.onload = function () {
-      loadCode('README','md');
+      loadCode('README.md','md');
       loadCode('main.c','c');
       loadCode('Makefile','makefile');
-      loadCode('LICENSE','md');
+      loadCode('LICENSE.md','md');
     };
     function loadCode(filename,lang) {
       var xhr = new XMLHttpRequest();
@@ -184,10 +187,10 @@
               '<div class="title"><b>' + filename + '</b></div>' +
               '<div class="nav">' +
               '<a href="/">home</a> | ' +
-              '<a href="#README">README</a> | ' +
+              '<a href="#README.md">README.md</a> | ' +
               '<a href="#main.c">main.c</a> | ' +
               '<a href="#Makefile">Makefile</a> | ' +
-              '<a href="#LICENSE">LICENSE</a>' +
+              '<a href="#LICENSE.md">LICENSE.md</a>' +
               '</div>';
             
             if (lang !== 'md') {
@@ -206,7 +209,7 @@
                 main.innerHTML += '->Nessuna informazione disponibile';
               } else {
                 var converter = new showdown.Converter();
-                main.innerHTML += converter.makeHtml(xhr.responseText);
+                main.innerHTML += '<div class="md">' + converter.makeHtml(xhr.responseText) + '</div>';
               }
             }
           } else {
