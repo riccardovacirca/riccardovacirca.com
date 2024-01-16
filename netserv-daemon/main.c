@@ -1,3 +1,4 @@
+
 #include "apr.h"
 #include "apr_general.h"
 #include "apr_pools.h"
@@ -22,39 +23,37 @@
 #include "netserv.h"
 #include "mongoose.h"
 
-// Stato globale del servizio
-typedef struct context_t {
-  // Puntatore al pool di memoria del servizio
+/**
+ * Stato globale del servizio
+ */
+typedef struct ns_context_t {
   apr_pool_t *pool;
-  // Host del servizio
   const char *host;
-  // Porta del servizio
   const char *port;
-  // Host + Porta associati al servizio
   const char *addr;
-  // Timeout
   const char *timeout;
-  // Massimo numero di threads concorrenti
   const char *max_threads;
-  // Nome del del file di log
   const char *log_file;
-  // Nome del driver di database
   const char *dbd_driver;
-  // Stringa di connessione con il server di database
   const char *dbd_conn_s;
-  // Directory di upload dei file
   const char *upload_dir;
-  // Puntatore al logger
-  logger_t *logger;
-} context_t;
+  ns_logger_t *logger;
+} ns_context_t;
 
-// Stato di eseguzione del main loop del servizio
-volatile sig_atomic_t server_run = 1;
+/**
+ * Stato di esecuzione del main loop del servizio
+ */
+volatile sig_atomic_t ns_server_run = 1;
 
-// Alloca e inizializza lo stato globale del servizio
-context_t* context_alloc(apr_pool_t *mp)
+/**
+ * Alloca e inizializza lo stato globale del servizio
+ * @param mp Pool di memoria
+ * @return Stato globale del server
+ * @pre @p mp != NULL
+*/
+ns_context_t* ns_context_alloc(apr_pool_t *mp)
 {
-  context_t *res = (context_t*)apr_palloc(mp, sizeof(context_t));
+  ns_context_t *res = (ns_context_t*)apr_palloc(mp, sizeof(ns_context_t));
   if (res != NULL) {
     res->pool = mp;
     res->host = NULL;
@@ -71,8 +70,12 @@ context_t* context_alloc(apr_pool_t *mp)
   return res;
 }
 
-// Rilascia le risorse allocate nello stato globale del servizio
-void context_destroy(context_t *ctx)
+/**
+ * Rilascia le risorse allocate nello stato globale del servizio
+ * @param ctx Stato globale del daemon
+ * @pre @p ctx != NULL
+*/
+void ns_context_destroy(ns_context_t *ctx)
 {
   if (ctx->logger != NULL) {
     if (ctx->logger->mutex != NULL) {
@@ -86,37 +89,45 @@ void context_destroy(context_t *ctx)
   }
 }
 
-// Callback associata al segnale di terminazione del servizio
-void signal_cb(int signum)
+/**
+ * Callback associata al segnale di terminazione del servizio
+ */
+void ns_signal_cb(int signum)
 {
   // In presenza di un segnale di tipo SIGTERM (es. CTRL+C)
   if (signum == SIGTERM || signum == SIGINT) {
     // Falsifico la condizione di attività del main loop del servizio
-    server_run = 0;
+    ns_server_run = 0;
   }
 }
 
-// Tipo puntatore a funzione associato alla callback di terminazione
+/**
+ * Tipo puntatore a funzione associato alla callback di terminazione
+ * @param s Valore intero associato al segnale
+*/
 typedef void(*sighd_t)(int s);
 
-// Signal handler
-void signal_handler(struct sigaction *sig_action, sighd_t signal_cb)
+/**
+ * Inizializza la struttura dati per il signal handler
+ * con la funzione di terminazione e registra la funzione di callback
+ * @param sig_action Struttura dati associata al gestore del segnale
+ * @param cb Callback di gestione del segnale
+ * @pre @p sig_action != NULL, @p cb != NULL
+*/
+void ns_signal_handler(struct sigaction *sig_action, sighd_t cb)
 {
-  // Inizializzo la struttura dati per il signal handler
-  // con la funzione di terminazione
-  sig_action->sa_handler = signal_cb;
+  sig_action->sa_handler = cb;
   sigemptyset(&sig_action->sa_mask);
   sig_action->sa_flags = 0;
-  // Registro la funzione di callback
   sigaction(SIGTERM, sig_action, NULL);
   sigaction(SIGINT, sig_action, NULL);
 }
 
 /**
  * Inizializza la struttura dati della request HTTP
- */
-apr_status_t ns_request_init(apr_pool_t *mp, ns_request_t **req, 
-                             struct mg_http_message *hm, char **er_msg)
+*/
+ns_status_t ns_request_init(apr_pool_t *mp, ns_request_t **req, 
+                            struct mg_http_message *hm, char **er_msg)
 {
   /*
   STATE INITIALIZATION
@@ -125,18 +136,16 @@ apr_status_t ns_request_init(apr_pool_t *mp, ns_request_t **req,
   {
     struct flag_t
     {
-      // Parametri di input
       int ok_input;
     } flag;
 
-    // Stato di errore della funzione
     int error;
-    int result;
+    ns_status_t result;
 
   } st = {
     .flag.ok_input = 0,
     .error = 0,
-    .result = 0
+    .result = NS_FAILURE
   };
   
   /*
@@ -151,11 +160,10 @@ apr_status_t ns_request_init(apr_pool_t *mp, ns_request_t **req,
       break;
     }
 
-
     /*
     Setto lo stato di successo della funzione
     */
-    st.result = 1;
+    st.result = NS_SUCCESS;
 
   } while (0);
   
@@ -175,15 +183,15 @@ apr_status_t ns_request_init(apr_pool_t *mp, ns_request_t **req,
   Restituisco APR_SUCCESS in caso di successo
   altrimenti APR_EGENERAL
   */
-  return st.result ? APR_SUCCESS : APR_EGENERAL;
+  return st.result;
 }
 
 /**
  * Request handler associato al servizio
- * @param c
- * @param ev
- * @param ev_data
- * @param fn_data
+ * @param c Stato della connessione
+ * @param ev Evento associato alla connessione corrente
+ * @param ev_data Dati associati all'evento
+ * @param fn_data Dati utente
  */
 void req_hd(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {
@@ -194,27 +202,17 @@ void req_hd(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
   {
     struct flag_t
     {
-      // Parametri di input
       int ok_input;
-      // Stato di inizializzazione del runtime APR
       int ok_apr_init;
-      // Stato di allocazione del pool di memoria
       int ok_pool;
-      // Stato di allocazione/inizializzazione della request HTTP
       int ok_request;
-      // Stato di allocazione della response HTTP
       int ok_response;
     } flag;
 
-    // Stato di errore della funzione
     int error;
-    // Pool di memoria
     apr_pool_t *pool;
-    // Stato globale del daemon
-    context_t *context;
-    // Messaggio HTTP
+    ns_context_t *context;
     struct mg_http_message *hm;
-    // Messaggio di errore
     char *er_msg;
 
   } st = {
@@ -251,7 +249,7 @@ void req_hd(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
       /*
       Estraggo lo stato globale del servizio
       */
-      st.context = (context_t*)fn_data;
+      st.context = (ns_context_t*)fn_data;
       if (st.error = (st.context == NULL)) {
         break;
       }
@@ -366,7 +364,7 @@ void req_hd(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
  * @param er_msg Messaggio di errore
  * @return APR_SUCCESS in caso di successo altrimenti APR_EGENERAL
 */
-apr_status_t parse_args(context_t *ctx, int argc, char *argv[], char **er_msg)
+ns_status_t parse_args(ns_context_t *ctx, int argc, char *argv[], char **er_msg)
 {
   /*
   STATE INITIALIZATION
@@ -389,7 +387,7 @@ apr_status_t parse_args(context_t *ctx, int argc, char *argv[], char **er_msg)
   } st = {
     .flag.input = 0,
     .flag.arg_format = 0,
-    .result = 0,
+    .result = NS_FAILURE,
     .error = 0
   };
 
@@ -468,7 +466,7 @@ apr_status_t parse_args(context_t *ctx, int argc, char *argv[], char **er_msg)
     /*
     Setto lo stato di successo della funzione
     */
-    st.result = 1;
+    st.result = NS_SUCCESS;
 
   } while (0);
 
@@ -496,7 +494,7 @@ apr_status_t parse_args(context_t *ctx, int argc, char *argv[], char **er_msg)
   Restituisco APR_SUCCESS in caso di successo
   altrimenti APR_EGENERAL
   */
-  return st.result ? APR_SUCCESS : APR_EGENERAL;
+  return st.result;
 }
 
 /**
@@ -508,8 +506,8 @@ apr_status_t parse_args(context_t *ctx, int argc, char *argv[], char **er_msg)
  * @param er_msg Messaggio di errore
  * @return APR_SUCCESS in caso di successo altrimenti APR_EGENERAL
  */
-apr_status_t ns_context_init(apr_pool_t *mp, context_t **ctx, int argc,
-                             char *argv[], char **er_msg)
+ns_status_t ns_context_init(apr_pool_t *mp, ns_context_t **ctx, int argc,
+                            char *argv[], char **er_msg)
 {
   /*
   STATE INITIALIZATION
@@ -537,7 +535,7 @@ apr_status_t ns_context_init(apr_pool_t *mp, context_t **ctx, int argc,
     .flag.ok_mutex = 0,
     .flag.ok_logger = 0,
     .error = 0,
-    .result = 0
+    .result = NS_FAILURE
   };
 
   /*
@@ -586,7 +584,7 @@ apr_status_t ns_context_init(apr_pool_t *mp, context_t **ctx, int argc,
     /*
     Inizializzo il logger
     */
-    (*ctx)->logger = log_alloc(mp, st.log_mutex, (*ctx)->log_file, 0);
+    (*ctx)->logger = ns_log_alloc(mp, st.log_mutex, (*ctx)->log_file, 0);
     st.flag.ok_logger = (*ctx)->logger != NULL;
     if (st.error = !st.flag.ok_logger) {
       break;
@@ -595,7 +593,7 @@ apr_status_t ns_context_init(apr_pool_t *mp, context_t **ctx, int argc,
     /*
     Setto lo stato di successo della funzione
     */
-    st.result = 1;
+    st.result = NS_SUCCESS;
 
   } while (0);
 
@@ -625,7 +623,7 @@ apr_status_t ns_context_init(apr_pool_t *mp, context_t **ctx, int argc,
   Restituisco APR_SUCCESS in caso di successo
   altrimenti APR_EGENERAL
   */
-  return st.result ? APR_SUCCESS : APR_EGENERAL;
+  return st.result;
 }
 
 /**
@@ -649,7 +647,7 @@ int main(int argc, char **argv)
     } flag;
     
     int error;
-    context_t *context;
+    ns_context_t *context;
     char *er_msg;
     apr_pool_t *pool;
     struct mg_mgr mgr;
@@ -676,7 +674,7 @@ int main(int argc, char **argv)
     Inizializzo il signal handler
     st.sig_action intercetta e gestisce i segnali di interruzione (es. CTRL+C)
     */
-    signal_handler(&(st.sig_action), signal_cb);
+    ns_signal_handler(&(st.sig_action), ns_signal_cb);
     
     /*
     Inizializzo le strutture dati del runtime APR
@@ -702,7 +700,7 @@ int main(int argc, char **argv)
     Alloco lo stato globale del daemon
     st.context è la struttura dati propagata dal main process ai request handler
     */
-    st.context = context_alloc(st.pool);
+    st.context = ns_context_alloc(st.pool);
     if (st.error = (st.context == NULL)) {
       break;
     }
@@ -746,7 +744,7 @@ int main(int argc, char **argv)
     */
     mg_mgr_init(&(st.mgr));
     mg_http_listen(&(st.mgr), (st.context)->addr, req_hd, (void*)(st.context));
-    while (server_run) {
+    while (ns_server_run) {
       mg_mgr_poll(&(st.mgr), 1000);
     }
     sleep(2); // 2 secondi di attesa per l'uscita
@@ -755,7 +753,7 @@ int main(int argc, char **argv)
     /*
     Rilascio st.context
     */
-    context_destroy(st.context);
+    ns_context_destroy(st.context);
 
   } while (0);
 

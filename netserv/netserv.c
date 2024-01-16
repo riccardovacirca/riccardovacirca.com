@@ -545,7 +545,7 @@ apr_time_t ns_timestamp(int year, int month, int day, int hour, int minute, int 
   }
   if (year < 1970 || year > 2100 || month < 1 || month > 12 || day < 1 || day > 31 ||
     hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59) {
-    return ERROR_TIMESTAMP;
+    return NS_ERROR_TIMESTAMP;
   }
   apr_time_exp_t timeExp;
   apr_time_t currentTime = apr_time_now(); // Ottieni il tempo corrente
@@ -566,7 +566,7 @@ apr_time_t ns_now() {
   return ns_timestamp(0, 0, 0, 0, 0, 0);
 }
 
-void ns_log_rotate(logger_t *l) {
+void ns_log_rotate(ns_logger_t *l) {
   apr_finfo_t finfo;
   // Estraggo i metadati del file di log corrente
   apr_status_t rv = apr_file_info_get(&finfo, APR_FINFO_SIZE, l->fh);
@@ -629,8 +629,8 @@ void ns_log_rotate(logger_t *l) {
   apr_file_close(fh_new);
 }
 
-logger_t* ns_log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz) {
-  logger_t *ret = (logger_t*)apr_palloc(mp, sizeof(logger_t));
+ns_logger_t* ns_log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz) {
+  ns_logger_t *ret = (ns_logger_t*)apr_palloc(mp, sizeof(ns_logger_t));
   if (ret != NULL) {
     ret->pool = mp;
     ret->fname = f;
@@ -640,12 +640,12 @@ logger_t* ns_log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr
     if (st != APR_SUCCESS) {
       return NULL;
     }
-    log_rotate(ret);
+    ns_log_rotate(ret);
   }
   return ret;
 }
 
-void ns_log_destroy(logger_t *l) {
+void ns_log_destroy(ns_logger_t *l) {
   if (l != NULL) {
     if (l->fh != NULL) {
       apr_file_close(l->fh);
@@ -734,194 +734,4 @@ ns_request_t* ns_request_alloc(apr_pool_t *mp)
     req->uri = NULL;
   }
   return req;
-}
-
-// Setter e getter per il campo 'method'
-void set_request_method(ns_request_t *request, const char *method) {
-  request->method = method;
-}
-
-const char *get_request_method(const ns_request_t *request) {
-  return request->method;
-}
-
-// Setter e getter per il campo 'body'
-void set_request_body(ns_request_t *request, const char *body) {
-  request->body = body;
-}
-
-const char *get_request_body(const ns_request_t *request) {
-  return request->body;
-}
-
-// Setter e getter per il campo 'query'
-void set_request_query(ns_request_t *request, const char *query) {
-  request->query = query;
-}
-
-const char *get_request_query(const ns_request_t *request) {
-  return request->query;
-}
-
-// Setter e getter per il campo 'uri'
-void set_request_uri(ns_request_t *request, const char *uri) {
-  request->uri = uri;
-}
-
-const char *get_request_uri(const ns_request_t *request) {
-  return request->uri;
-}
-
-// Setter e getter per il campo 'headers'
-void set_request_headers(ns_request_t *request, apr_table_t *headers) {
-  request->headers = headers;
-}
-
-apr_table_t *get_request_headers(const ns_request_t *request) {
-  return request->headers;
-}
-
-// Setter e getter per il campo 'args'
-void set_request_args(ns_request_t *request, apr_table_t *args) {
-  request->args = args;
-}
-
-apr_table_t *get_request_args(const ns_request_t *request) {
-  return request->args;
-}
-
-// Setter e getter per il campo 'parsed_uri'
-void set_request_parsed_uri(ns_request_t *request, apr_table_t *parsed_uri) {
-  request->parsed_uri = parsed_uri;
-}
-
-apr_table_t *get_request_parsed_uri(const ns_request_t *request) {
-  return request->parsed_uri;
-}
-
-// Setter e getter per il campo 'http_version'
-void set_request_http_version(ns_request_t *request, const char *http_version) {
-  request->http_version = http_version;
-}
-
-const char *get_request_http_version(const ns_request_t *request) {
-  return request->http_version;
-}
-
-// Setter e getter per il campo 'client_ip'
-void set_request_client_ip(ns_request_t *request, const char *client_ip) {
-  request->client_ip = client_ip;
-}
-
-const char *get_request_client_ip(const ns_request_t *request) {
-  return request->client_ip;
-}
-
-// Setter e getter per il campo 'client_port'
-void set_request_client_port(ns_request_t *request, int client_port) {
-  request->client_port = client_port;
-}
-
-int get_request_client_port(const ns_request_t *request) {
-  return request->client_port;
-}
-
-// Setter e getter per il campo 'prev_method'
-void set_request_prev_method(ns_request_t *request, const char *prev_method) {
-  request->prev_method = prev_method;
-}
-
-const char *get_request_prev_method(const ns_request_t *request) {
-  return request->prev_method;
-}
-
-// Setter e getter per il campo 'prev_uri'
-void set_request_prev_uri(ns_request_t *request, const char *prev_uri) {
-  request->prev_uri = prev_uri;
-}
-
-const char *get_request_prev_uri(const ns_request_t *request) {
-  return request->prev_uri;
-}
-
-// Setter e getter per il campo 'session_id'
-void set_request_session_id(ns_request_t *request, const char *session_id) {
-  request->session_id = session_id;
-}
-
-const char *get_request_session_id(const ns_request_t *request) {
-  return request->session_id;
-}
-
-// Setter e getter per il campo 'cookies'
-void set_request_cookies(ns_request_t *request, apr_table_t *cookies) {
-  request->cookies = cookies;
-}
-
-apr_table_t *get_request_cookies(const ns_request_t *request) {
-  return request->cookies;
-}
-
-// Setter per una entry specifica nella tabella 'headers'
-void set_request_header_entry(ns_request_t *request, const char *key, const char *value) {
-  if (request->headers == NULL) {
-    // Inizializza la tabella se non è stata ancora creata
-    request->headers = apr_table_make(/* pool */, /* size_hint */);
-  }
-
-  // Imposta la chiave e il valore nella tabella
-  apr_table_set(request->headers, key, value);
-}
-
-// Getter per una entry specifica nella tabella 'headers'
-const char *get_request_header_entry(const ns_request_t *request, const char *key) {
-  return (request->headers != NULL) ? apr_table_get(request->headers, key) : NULL;
-}
-
-// Setter per una entry specifica nella tabella 'args'
-void set_request_args_entry(ns_request_t *request, const char *key, const char *value) {
-  if (request->args == NULL) {
-    // Inizializza la tabella se non è stata ancora creata
-    request->args = apr_table_make(/* pool */, /* size_hint */);
-  }
-
-  // Imposta la chiave e il valore nella tabella
-  apr_table_set(request->args, key, value);
-}
-
-// Getter per una entry specifica nella tabella 'args'
-const char *get_request_args_entry(const ns_request_t *request, const char *key) {
-  return (request->args != NULL) ? apr_table_get(request->args, key) : NULL;
-}
-
-// Setter per una entry specifica nella tabella 'parsed_uri'
-void set_request_parsed_uri_entry(ns_request_t *request, const char *key, const char *value) {
-  if (request->parsed_uri == NULL) {
-    // Inizializza la tabella se non è stata ancora creata
-    request->parsed_uri = apr_table_make(/* pool */, /* size_hint */);
-  }
-
-  // Imposta la chiave e il valore nella tabella
-  apr_table_set(request->parsed_uri, key, value);
-}
-
-// Getter per una entry specifica nella tabella 'parsed_uri'
-const char *get_request_parsed_uri_entry(const ns_request_t *request, const char *key) {
-  return (request->parsed_uri != NULL) ? apr_table_get(request->parsed_uri, key) : NULL;
-}
-
-// Setter per una entry specifica nella tabella 'cookies'
-void set_request_cookies_entry(ns_request_t *request, const char *key, const char *value) {
-  if (request->cookies == NULL) {
-    // Inizializza la tabella se non è stata ancora creata
-    request->cookies = apr_table_make(/* pool */, /* size_hint */);
-  }
-
-  // Imposta la chiave e il valore nella tabella
-  apr_table_set(request->cookies, key, value);
-}
-
-// Getter per una entry specifica nella tabella 'cookies'
-const char *get_request_cookies_entry(const ns_request_t *request, const char *key) {
-  return (request->cookies != NULL) ? apr_table_get(request->cookies, key) : NULL;
 }

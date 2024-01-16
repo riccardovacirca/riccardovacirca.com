@@ -22,6 +22,8 @@
 #include "apr_file_io.h"
 #include "apr_file_info.h"
 #include "apr_time.h"
+#include "apr_dbd.h"
+
 #include "errno.h"
 #include "time.h"
 #include "syscall.h"
@@ -42,49 +44,46 @@ extern "C" {
 #define NS_LOG_MAX_MSG_SIZE 512
 #define NS_LOG_MSG_FMT "[%s] [%s] [%05d] %s\r\n"
 
-#define ERROR_TIMESTAMP -1
+#define NS_ERROR_TIMESTAMP (-1)
+
+// Stato di fallimento o successo
+typedef enum ns_status_t {
+  NS_FAILURE = 0,
+  NS_SUCCESS
+} ns_status_t;
 
 // Interfaccia con il logger
 typedef struct ns_logger_t {
-  // Puntatore al pool di memoria del servizio
   apr_pool_t *pool;
-  // Handler del file di log
   apr_file_t *fh;
-  // Nome del file di log
   const char *fname;
-  // Mutex associato al logger
   apr_thread_mutex_t *mutex;
   apr_size_t max_size;
-
-} logger_t;
+} ns_logger_t;
 
 // Interfaccia con il server di database
 typedef struct ns_dbd_t {
-  // Descrizione dell'ultimo errore occorso
   const char *er_msg;
-  // Driver di database
   const apr_dbd_driver_t *drv;
-  // Handler della connessione con il server di database
   apr_dbd_t *hdl;
-  // Stato della transazione
   apr_dbd_transaction_t *trx;
-} dbd_t;
+} ns_dbd_t;
 
 typedef struct ns_request_t {
+  int client_port;
   const char *method;
   const char *body;
   const char *query;
   const char *uri;
+  const char *http_version;
+  const char *client_ip;
+  const char *prev_method;
+  const char *prev_uri;
+  const char *session_id;
   apr_table_t *headers;
   apr_table_t *args;
   apr_table_t *parsed_uri;
-  const char *http_version;
-const char *client_ip;
-int client_port;
-const char *prev_method;
-const char *prev_uri;
-const char *session_id;
-apr_table_t *cookies;
+  apr_table_t *cookies;
 } ns_request_t;
 
 typedef struct ns_response_t {
@@ -128,15 +127,14 @@ apr_size_t ns_file_read(apr_pool_t *mp, apr_file_t *fd, void **buf);
 apr_status_t ns_file_close(apr_file_t *fd);
 apr_time_t ns_timestamp(int year, int month, int day, int hour, int minute, int second);
 apr_time_t ns_now();
-void ns_log_rotate(logger_t *l);
-logger_t* ns_log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz);
-void ns_log_destroy(logger_t *l);
+void ns_log_rotate(ns_logger_t *l);
+ns_logger_t* ns_log_alloc(apr_pool_t *mp, apr_thread_mutex_t *m, const char *f, apr_size_t sz);
+void ns_log_destroy(ns_logger_t *l);
 void ns_daemonize();
 char* ns_ppipein(apr_pool_t *mp);
 ns_request_t* ns_request_alloc(apr_pool_t *mp);
 
-
-#define log_write(l, t, m) do {\
+#define ns_log_write(l, t, m) do {\
   if (l != NULL && t != NULL && m != NULL) {\
     char _log[NS_LOG_MAX_MSG_SIZE], _ts[APR_CTIME_LEN];\
     apr_time_t _now = apr_time_now();\
@@ -147,7 +145,7 @@ ns_request_t* ns_request_alloc(apr_pool_t *mp);
       apr_thread_mutex_lock(l->mutex);\
       apr_file_printf(l->fh, "%s", _log);\
       apr_file_flush(l->fh);\
-      log_rotate(l);\
+      ns_log_rotate(l);\
       apr_thread_mutex_unlock(l->mutex);\
     }\
   }\
