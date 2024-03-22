@@ -1,6 +1,0 @@
-*.o
-.flavor
-.objs
-kore-hello.so
-assets.h
-cert

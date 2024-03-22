@@ -1,1 +1,0 @@
-LoadModule ns_cookies_module /usr/lib/apache2/modules/mod_ns_cookies.so
