@@ -16,20 +16,86 @@
     <style>
     body{margin:0;border-top:4px solid #17a2b8;position:relative;}
     .logo{color:#777}.title{color:#444;}.sub-title{color:#17a2b8;}main,footer{margin:0 auto;max-width:770px;}main,code{font-size:16px;}#main{padding-top:30px;}.font-anton{font-family:'Anton',sans-serif;}#db-diagram{max-width:678px;max-height:391px;width:100%;}td,th{font-size:14px;font-family:monospace,'Courier New',Courier;border-top:1px solid #ccc;}.card-body{padding:5px;}td{vertical-align:top;}
+    .header-container{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+    .header-text{flex:1;}
+    .header-avatar{flex-shrink:0;margin-left:20px;}
+    .avatar-img{width:64px;height:64px;border-radius:50%;border:2px solid #17a2b8;display:none;}
+    .site-menu{text-align:center;margin:20px 0;padding:10px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;}
+    .menu-item{color:#17a2b8;text-decoration:none;margin:0 20px;font-weight:500;}
+    .menu-item:hover{color:#066;text-decoration:none;}
+    footer a{color:#17a2b8;text-decoration:none;margin:0 2px;}
+    footer a:hover{color:#066;text-decoration:none;}
+    .about-card{background:#f8f9fa;border:1px solid #eee;border-radius:5px;padding:15px;margin:20px 0;}
+    .about-title{color:#17a2b8;font-size:1rem;margin-bottom:8px;font-weight:600;}
+    .recent-articles{margin-top:30px;}
+    .article-card{background:#f8f9fa;border:1px solid #eee;border-radius:5px;padding:15px;height:100%;}
+    .article-category{color:#17a2b8;font-size:0.8rem;margin-bottom:5px;font-weight:600;}
+    .article-excerpt{font-size:0.9rem;line-height:1.4;margin:8px 0;}
+    .projects-card{border:1px solid #eee;border-radius:5px;padding:15px;margin:20px 0;}
     </style>
 </head>
 <body><main><div id="main" class="container">
 <!----------------------------------------------------------------------------->
-<h4 class="display-5 font-anton logo">riccardo vacirca</h4>
-<h1 class="display-5 font-anton logo">personal website</h1><hr>
-<!----------------------------------------------------------------------------->
-<p style="font-size: 18px;">
-Developer skilled in C, C++, Apache2/APR Module development, MySQL,
-PostgreSQL, SQLite, Python, Web development</p>
-<div>
-    <p><strong>latest project</strong></p>
-    <div id="repos"></div>
+<div class="header-container">
+  <div class="header-text">
+    <h4 class="display-5 font-anton logo">riccardo vacirca</h4>
+    <h1 class="display-5 font-anton logo">personal website</h1>
+  </div>
+  <div class="header-avatar">
+    <img id="user-avatar" src="" alt="Profile Avatar" class="avatar-img">
+  </div>
 </div>
+
+<nav class="site-menu">
+  <a href="./" class="menu-item">home</a>
+  <a href="./projects/" class="menu-item">projects</a>
+  <!-- a href="./articles/" class="menu-item">articles</a -->
+  <a href="./contacts/" class="menu-item">contacts</a>
+</nav>
+
+<!----------------------------------------------------------------------------->
+<div class="about-card">
+    <h5 class="about-title">About</h5>
+    <p>Software Engineer skilled in C, C++, Apache2/APR Module development, MySQL, PostgreSQL, SQLite3, Python, Mongoose HTTP server, Web development</p>
+</div>
+<p><strong>latest project</strong></p>
+<div class="projects-card">
+    <div id="repos"></div>
+    <div class="text-right"><a class="text-info" href="projects/"><small>All projects...</small></a></div>
+</div>
+
+<!-- div class="recent-articles">
+    <p><strong>recent articles</strong></p>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="article-card">
+                <h6 class="article-category">Apache APR</h6>
+                <h5><a href="./articles/contents/apr/2023-03-15-apr-memory-pools-it.html" style="color: inherit; text-decoration: none;">Memory Pool in Apache APR</a></h5>
+                <p class="article-excerpt">Efficient memory management using Apache APR memory pools for high-performance applications...</p>
+                <small class="text-muted">March 15, 2023</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="article-card">
+                <h6 class="article-category">C/C++</h6>
+                <h5><a href="./articles/contents/c_cpp/2023-02-22-modern-cpp-patterns-it.html" style="color: inherit; text-decoration: none;">Modern Patterns in C++17/20</a></h5>
+                <p class="article-excerpt">Writing expressive and performant code with structured bindings, concepts, ranges and smart pointers...</p>
+                <small class="text-muted">February 22, 2023</small>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="projects-card">
+                <h6 class="article-category">Mathematic</h6>
+                <h5><a href="./articles/contents/mathematic/2025-02-28-funzioni-obiettivo-introduzione-allo-scheduling-it.html" style="color: inherit; text-decoration: none;">Funzioni obiettivo. Introduzione allo scheduling</a></h5>
+                <p class="article-excerpt">Problemi di minimo vincolato, funzioni obiettivo e vincoli nell'ottimizzazione dei processi di scheduling software...</p>
+                <small class="text-muted">February 28, 2025</small>
+            </div>
+        </div>
+    </div>
+</div -->
+
 <!----------------------------------------------------------------------------->
 </div>
 </main>
@@ -37,7 +103,7 @@ PostgreSQL, SQLite, Python, Web development</p>
 <!----------------------------------------------------------------------------->
 <hr>
 <p class="mb-3 text-muted">
-    &copy; 2020-2023 Riccardo Vacirca
+    &copy; 2020-2025 Riccardo Vacirca
     <a href="https://www.linkedin.com/in/riccardovacirca"><i class="fa fa-linkedin-square"></i></a>
     <a href="https://github.com/riccardovacirca"><i class="fa fa-git-square"></i></a><br>
     <small>All right reserved</small>
@@ -52,31 +118,123 @@ PostgreSQL, SQLite, Python, Web development</p>
 <script>/** SQL highlighter for PrismJS <http://prismjs.com/> * @author Petros Kyladitis */ Prism.languages.sql={comment:{pattern:/(^|[^\\])(\/\*[\w\W]*?\*\/|((--)|(\/\/)).*?(\r?\n|$))/g,lookbehind:!0},string: /("|')(\\?.)*?\1/g,keyword:/\b(ACTION|ADD|AFTER|ALGORITHM|ALTER|ANALYZE|APPLY|AS|AS|ASC|AUTHORIZATION|BACKUP|BDB|BEGIN|BERKELEYDB|BIGINT|BINARY|BIT|BLOB|BOOL|BOOLEAN|BREAK|BROWSE|BTREE|BULK|BY|CALL|CASCADE|CASCADED|CASE|CHAIN|CHAR VARYING|CHARACTER VARYING|CHECK|CHECKPOINT|CLOSE|CLUSTERED|COALESCE|COLUMN|COLUMNS|COMMENT|COMMIT|COMMITTED|COMPUTE|CONNECT|CONSISTENT|CONSTRAINT|CONTAINS|CONTAINSTABLE|CONTINUE|CONVERT|CREATE|CROSS|CURRENT|CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|CURRENT_USER|CURSOR|DATA|DATABASE|DATABASES|DATETIME|DBCC|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFINER|DELAYED|DELETE|DENY|DESC|DESCRIBE|DETERMINISTIC|DISABLE|DISCARD|DISK|DISTINCT|DISTINCTROW|DISTRIBUTED|DO|DOUBLE|DOUBLE PRECISION|DROP|DUMMY|DUMP|DUMPFILE|DUPLICATE KEY|ELSE|ENABLE|ENCLOSED BY|END|ENGINE|ENUM|ERRLVL|ERRORS|ESCAPE|ESCAPED BY|EXCEPT|EXEC|EXECUTE|EXIT|EXPLAIN|EXTENDED|FETCH|FIELDS|FILE|FILLFACTOR|FIRST|FIXED|FLOAT|FOLLOWING|FOR|FOR EACH ROW|FORCE|FOREIGN|FREETEXT|FREETEXTTABLE|FROM|FULL|FUNCTION|GEOMETRY|GEOMETRYCOLLECTION|GLOBAL|GOTO|GRANT|GROUP|HANDLER|HASH|HAVING|HOLDLOCK|IDENTITY|IDENTITY_INSERT|IDENTITYCOL|IF|IGNORE|IMPORT|INDEX|INFILE|INNER|INNODB|INOUT|INSERT|INT|INTEGER|INTERSECT|INTO|INVOKER|ISOLATION LEVEL|JOIN|KEY|KEYS|KILL|LANGUAGE SQL|LAST|LEFT|LIMIT|LINENO|LINES|LINESTRING|LOAD|LOCAL|LOCK|LONGBLOB|LONGTEXT|MATCH|MATCHED|MEDIUMBLOB|MEDIUMINT|MEDIUMTEXT|MERGE|MIDDLEINT|MODIFIES SQL DATA|MODIFY|MULTILINESTRING|MULTIPOINT|MULTIPOLYGON|NATIONAL|NATIONAL CHAR VARYING|NATIONAL CHARACTER|NATIONAL CHARACTER VARYING|NATIONAL VARCHAR|NATURAL|NCHAR|NCHAR VARCHAR|NEXT|NO|NO SQL|NOCHECK|NOCYCLE|NONCLUSTERED|NULLIF|NUMERIC|OF|OFF|OFFSETS|ON|OPEN|OPENDATASOURCE|OPENQUERY|OPENROWSET|OPTIMIZE|OPTION|OPTIONALLY|ORDER|OUT|OUTER|OUTFILE|OVER|PARTIAL|PARTITION|PERCENT|PIVOT|PLAN|POINT|POLYGON|PRECEDING|PRECISION|PREV|PRIMARY|PRINT|PRIVILEGES|PROC|PROCEDURE|PUBLIC|PURGE|QUICK|RAISERROR|READ|READS SQL DATA|READTEXT|REAL|RECONFIGURE|REFERENCES|RELEASE|RENAME|REPEATABLE|REPLICATION|REQUIRE|RESTORE|RESTRICT|RETURN|RETURNS|REVOKE|RIGHT|ROLLBACK|ROUTINE|ROWCOUNT|ROWGUIDCOL|ROWS?|RTREE|RULE|SAVE|SAVEPOINT|SCHEMA|SELECT|SERIAL|SERIALIZABLE|SESSION|SESSION_USER|SET|SETUSER|SHARE MODE|SHOW|SHUTDOWN|SIMPLE|SMALLINT|SNAPSHOT|SOME|SONAME|START|STARTING BY|STATISTICS|STATUS|STRIPED|SYSTEM_USER|TABLE|TABLES|TABLESPACE|TEMPORARY|TEMPTABLE|TERMINATED BY|TEXT|TEXTSIZE|THEN|TIMESTAMP|TINYBLOB|TINYINT|TINYTEXT|TO|TOP|TRAN|TRANSACTION|TRANSACTIONS|TRIGGER|TRUNCATE|TSEQUAL|TYPE|TYPES|UNBOUNDED|UNCOMMITTED|UNDEFINED|UNION|UNPIVOT|UPDATE|UPDATETEXT|USAGE|USE|USER|USING|VALUE|VALUES|VARBINARY|VARCHAR|VARCHARACTER|VARYING|VIEW|WAITFOR|WARNINGS|WHEN|WHERE|WHILE|WITH|WITH ROLLUP|WITHIN|WORK|WRITE|WRITETEXT)\b/gi,boolean:/\b(TRUE|FALSE|NULL)\b/gi,number:/\b-?(0x)?\d*\.?[\da-f]+\b/g,operator:/\b(ALL|AND|ANY|BETWEEN|EXISTS|IN|LIKE|NOT|OR|IS|UNIQUE|CHARACTER SET|COLLATE|DIV|OFFSET|REGEXP|RLIKE|SOUNDS LIKE|XOR)\b|[-+]{1}|!|=?&lt;|=?&gt;|={1}|(&amp;){1,2}|\|?\||\?|\*|\//gi,ignore:/&(lt|gt|amp);/gi,punctuation:/[;[\]()`,.]/g};</script>
 <script>/*$('#toast-1').toast('show');$('#toast-2').toast('show');*/</script>
 <script>
-axios({
-  method:"get",
-  url:"https://api.github.com/users/riccardovacirca/repos",
-  headers:{"Accept": "application/vnd.github.v3+json"}
-}).then((repos) => {
-  for (let i = repos.data.length-1; i >= 0; i--) {
-    if (repos.data[i] != null) {
-      let name = repos.data[i].name;
-      document.getElementById('repos').innerHTML +=
-        '<h3><strong>'+name+'</strong> <span id="'+name+'-rel"></span></h3>'+
-        (repos.data[i].description != null ? '<div>'+repos.data[i].description+'</div>' : '')+
-        '<div>Language: <b>'+repos.data[i].language+'</b>'+(repos.data[i].license != null ? ', License: <b>' + repos.data[i].license.name +'</b>' : '') + '</div>'+
-        (repos.data[i].homepage!=null && repos.data[i].homepage.length > 0 ? '<a class="text-info" href="'+repos.data[i].homepage+'">'+repos.data[i].homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,':'')+
-        '<a class="text-info" href="'+repos.data[i].html_url+'">'+repos.data[i].name+' on Github <i class="fa fa-github"></i></a>';
-      axios({
-        method:"get",
-        url:"https://api.github.com/repos/riccardovacirca/"+name+"/releases",
-        headers:{"Accept": "application/vnd.github.v3+json"}
-      }).then((rel) => {
-        document.getElementById(name+'-rel').innerHTML = rel.data[0].tag_name;
-      }).catch((err) => {console.log(err);});
-    }
+// Static fallback data
+const fallbackUserData = {
+  avatar_url: "https://avatars.githubusercontent.com/u/3167550?v=4"
+};
+
+const fallbackRepos = [
+  {
+    name: "microservice",
+    description: "C/C++ Microservice Library",
+    language: "C",
+    license: { name: "GPL-2.0" },
+    homepage: null,
+    html_url: "https://github.com/riccardovacirca/microservice",
+    latest_release: null
+  },
+  {
+    name: "grapheme",
+    description: "Graphometric analysis project based on an application of the Power Spectral Density",
+    language: "Python",
+    license: { name: "MIT" },
+    homepage: null,
+    html_url: "https://github.com/riccardovacirca/grapheme",
+    latest_release: null
+  },
+  {
+    name: "mod_helloworld",
+    description: "Simple HelloWorld microservice module",
+    language: "Makefile",
+    license: { name: "GPL-2.0" },
+    homepage: null,
+    html_url: "https://github.com/riccardovacirca/mod_helloworld",
+    latest_release: null
   }
+];
+
+// Function to display repositories
+function displayRepositories(repos, isLiveData = false) {
+  const whitelist = ['microservice', 'grapheme', 'mod_helloworld'];
+  const reposContainer = document.getElementById('repos');
+  reposContainer.innerHTML = ''; // Clear existing content
+  
+  if (!isLiveData) {
+    reposContainer.innerHTML += '<small class="text-muted">Using cached data due to API limits</small><br><br>';
+  }
+  
+  repos.forEach(repo => {
+    if (whitelist.includes(repo.name)) {
+      const titleElement = repo.name === 'microservice' 
+        ? '<h3><strong><a href="./microservice/" style="color: inherit; text-decoration: none;">'+repo.name+'</a></strong> <span id="'+repo.name+'-rel"></span></h3>'
+        : repo.name === 'grapheme'
+        ? '<h3><strong><a href="./grapheme/" style="color: inherit; text-decoration: none;">'+repo.name+'</a></strong> <span id="'+repo.name+'-rel"></span></h3>'
+        : '<h3><strong>'+repo.name+'</strong> <span id="'+repo.name+'-rel"></span></h3>';
+      
+      reposContainer.innerHTML += titleElement +
+        (repo.description ? '<div>'+repo.description+'</div>' : '') +
+        '<div>Language: <b>'+repo.language+'</b>' + (repo.license ? ', License: <b>' + repo.license.name +'</b>' : '') + '</div>' +
+        (repo.homepage ? '<a class="text-info" href="'+repo.homepage+'">'+repo.homepage+' (project homepage) <i class="fa fa-external-link"></i></a>,' : '') +
+        '<a class="text-info" href="'+repo.html_url+'">'+repo.name+' on Github <i class="fa fa-github"></i></a><hr>';
+      
+      // Add release info if available
+      if (repo.latest_release) {
+        document.getElementById(repo.name+'-rel').innerHTML = repo.latest_release;
+      }
+    }
+  });
+}
+
+// Try to fetch user avatar from GitHub API, fallback to static data
+axios({
+  method: "get",
+  url: "https://api.github.com/users/riccardovacirca",
+  headers: {"Accept": "application/vnd.github.v3+json"}
+}).then((user) => {
+  console.log('Successfully fetched user data from GitHub API');
+  const avatarImg = document.getElementById('user-avatar');
+  avatarImg.src = user.data.avatar_url;
+  avatarImg.style.display = 'block';
 }).catch((err) => {
-  console.log(err);
+  console.log('GitHub API error for user data, using fallback:', err.response?.status);
+  const avatarImg = document.getElementById('user-avatar');
+  avatarImg.src = fallbackUserData.avatar_url;
+  avatarImg.style.display = 'block';
+});
+
+// Try to fetch repositories from GitHub API, fallback to static data
+axios({
+  method: "get",
+  url: "https://api.github.com/users/riccardovacirca/repos",
+  headers: {"Accept": "application/vnd.github.v3+json"}
+}).then((repos) => {
+  console.log('Successfully fetched repository data from GitHub API');
+  const whitelist = ['microservice', 'grapheme', 'mod_helloworld'];
+  const filteredRepos = repos.data.filter(repo => whitelist.includes(repo.name));
+  
+  displayRepositories(filteredRepos, true);
+  
+  // Fetch release information for each repo
+  filteredRepos.forEach(repo => {
+    axios({
+      method: "get",
+      url: "https://api.github.com/repos/riccardovacirca/"+repo.name+"/releases",
+      headers: {"Accept": "application/vnd.github.v3+json"}
+    }).then((rel) => {
+      if (rel.data && rel.data.length > 0) {
+        document.getElementById(repo.name+'-rel').innerHTML = rel.data[0].tag_name;
+      }
+    }).catch((err) => {
+      console.log('Release API error for', repo.name, '- using fallback');
+      const fallbackRepo = fallbackRepos.find(r => r.name === repo.name);
+      if (fallbackRepo && fallbackRepo.latest_release) {
+        document.getElementById(repo.name+'-rel').innerHTML = fallbackRepo.latest_release;
+      }
+    });
+  });
+}).catch((err) => {
+  console.log('GitHub API error for repositories, using fallback data:', err.response?.status);
+  displayRepositories(fallbackRepos, false);
 });
 </script>
 </body>
